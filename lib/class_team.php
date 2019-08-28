@@ -24,8 +24,10 @@ class Team
     public $rdy               = 1; // Ready bool.
     public $imported          = false;
     public $is_retired        = 0;
-    public $value = 0; public $tv = 0; # Identical.
-    public $ff_bought = 0;
+    public $value             = 0;
+    public $tv                = 0; # Identical.
+    public $ff_bought         = 0;
+   // public $ff                = 0;  // Added to adjust won FF for redrafting
 
     // MySQL stored initials for imported teams
     public $won_0    = 0;
@@ -245,6 +247,20 @@ class Team
         } else {
             return false;
         }
+    }
+    
+    public function dffactor($delta) {
+    /*
+    * Add a delta to team's won Fan Factor. For Redraft Purposes
+    */
+        $query = "UPDATE mv_teams SET ff = GREATEST(ff + $delta, 0) WHERE f_tid = $this->team_id";
+        if (mysql_query($query)) {
+        $this->ff += $delta;
+        return true;
+        } else {
+        return false;
+        }
+        
     }
 
 	public function setff_bought($integer) {
@@ -476,6 +492,7 @@ class Team
 		'apothecary',
 		'rerolls',
 		'ff_bought',
+        'ff', // Added to adjust won FF for redraft
 		'ass_coaches',
 		'cheerleaders',
         'won_0',
