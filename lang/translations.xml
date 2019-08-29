@@ -302,6 +302,9 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                     <buy_goods>Buy team goods</buy_goods>
                     <drop_goods>Let go of team goods</drop_goods>
                     <ready_state>Set ready state</ready_state>
+                    
+                    <!-- Add seasons played and want to retire here  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  -->
+                    
                     <retire>Retire team</retire>
                     <delete>Delete team</delete>
 
