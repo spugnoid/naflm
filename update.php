@@ -1,5 +1,5 @@
 <?php
-
+# This update file creates the new table columns required to track seasons played and 'wants to retire' status
 
 require_once('settings.php');
         
