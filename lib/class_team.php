@@ -260,8 +260,9 @@ class Team
         }   
     }
     
-    // Seasons Played and Wants to Retire ====================================================================
-     public function incr_splayed($delta) {
+    // Seasons Played and Wants to Retire %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     
+    public function incr_splayed($delta) {
     /*
     * Increment the number of seasons a player has played
     */
@@ -276,7 +277,7 @@ class Team
    
     
     
-    // End Seasons Played and Wants to Retire ================================================================
+    // End Seasons Played and Wants to Retire %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     
     

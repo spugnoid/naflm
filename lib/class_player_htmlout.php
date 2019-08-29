@@ -250,6 +250,10 @@ class Player_HTMLOUT extends Player
 							<td><b>MVP</b></td>
 							<td><?php echo $p->mv_mvp; ?></td>
 						</tr>
+						<tr>
+							<td><b>Seasons</b></td>
+							<td><?php echo $p->seasons_played; ?></td>
+						</tr>
 					</table>
 				</div>
 			</div>
