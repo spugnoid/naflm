@@ -60,7 +60,7 @@ class SQLCore
 		global $CT_cols, $core_tables;
 		$allowed_fields = array(
 			'mvp', 'cp', 'td', 'intcpt', 'bh', 'si', 'ki', 'cas', 'tdcas', 'smp', 'elo',
-			'gf', 'ga', 'sdiff', 'tcasf', 'tcasa', 'tcdiff', 'won', 'lost', 'draw', 'swon', 'slost', 'sdraw', 'played', 'win_pct',
+			'gf', 'ga', 'sdiff', 'tcasf', 'tcasa', 'tcdiff', 'won', 'lost', 'draw', 'swon', 'slost', 'sdraw', 'played', 'win_pct', 'seasons_played', 'wants_retire'
 		);
 		$query = 'CREATE FUNCTION getPTS(tid '.$CT_cols[T_OBJ_TEAM].', trid '.$CT_cols[T_NODE_TOURNAMENT].')
 			RETURNS '.$CT_cols['pts'].'
@@ -301,12 +301,12 @@ class SQLCore
 				IF NOT done THEN
 
 					/* Update player DPROPS */
-					CALL getPlayerDProps(pid, inj_ma,inj_av,inj_ag,inj_st,inj_ni, ma,av,ag,st, ma_ua,av_ua,ag_ua,st_ua, value,status,date_died);
+					CALL getPlayerDProps(pid, inj_ma,inj_av,inj_ag,inj_st,inj_ni, ma,av,ag,st, ma_ua,av_ua,ag_ua,st_ua, value,status,date_died, seasons_played, wants_retire);
 					UPDATE players
 						SET players.inj_ma = inj_ma, players.inj_av = inj_av, players.inj_ag = inj_ag, players.inj_st = inj_st, players.inj_ni = inj_ni,
 							players.ma = ma, players.av = av, players.ag = ag, players.st = st,
 							players.ma_ua = ma_ua, players.av_ua = av_ua, players.ag_ua = ag_ua, players.st_ua = st_ua,
-							players.value = value, players.status = status, players.date_died = date_died
+							players.value = value, players.status = status, players.date_died = date_died, players.seasons_played = seasons_played, players.wants_retire = wants_retire
 						WHERE players.player_id = pid;
 
 					/* All-time win percentage */
@@ -1058,7 +1058,7 @@ class SQLCore
 				OUT inj_ma '.$CT_cols['chr'].',   OUT inj_av '.$CT_cols['chr'].',   OUT inj_ag '.$CT_cols['chr'].',   OUT inj_st '.$CT_cols['chr'].', OUT inj_ni '.$CT_cols['chr'].',
 				OUT ma '.$CT_cols['chr'].',       OUT av '.$CT_cols['chr'].',       OUT ag '.$CT_cols['chr'].',       OUT st '.$CT_cols['chr'].',
 				OUT ma_ua '.$CT_cols['chr_ua'].', OUT av_ua '.$CT_cols['chr_ua'].', OUT ag_ua '.$CT_cols['chr_ua'].', OUT st_ua '.$CT_cols['chr_ua'].',
-				OUT value '.$CT_cols['pv'].', OUT status '.$core_tables['players']['status'].', OUT date_died '.$core_tables['players']['date_died'].'
+				OUT value '.$CT_cols['pv'].', OUT status '.$core_tables['players']['status'].', OUT date_died '.$core_tables['players']['date_died'].' OUT seasons_played '.$core_tables['players']['seasons_played'].' OUT wants_retire '.$core_tables['players']['wants_retire'].'
 			)
 				NOT DETERMINISTIC
 				READS SQL DATA
