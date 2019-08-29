@@ -254,6 +254,16 @@ class Team_HTMLOUT extends Team
 					SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team->team_id));
 					break;
 				case 'removeNiggle': status($p->removeNiggle()); break;
+					
+					// My addition to add FF delta
+        case 'dff':
+        status($team->dffactor($dff = ($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']));
+        	if (Module::isRegistered('LogSubSys')) {
+        	Module::run('LogSubSys', array('createEntry', T_LOG_FF, $coach->coach_id, "Coach '$coach->name' (ID=$coach->coach_id) added a won FF delta for team '$team->name' (ID=$team->team_id) of amount = $dff"));
+					}
+					SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team->team_id));
+					break;    
+        // End my addition to ff
 			}
 		}
 		$team->setStats(false,false,false); # Reload fields in case they changed after team actions made.
