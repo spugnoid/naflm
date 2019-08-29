@@ -259,6 +259,27 @@ class Team
         return false;
         }   
     }
+    
+    // Seasons Played and Wants to Retire ====================================================================
+     public function incr_splayed($delta) {
+    /*
+    * Increment the number of seasons a player has played
+    */
+        $query = "UPDATE players SET seasons_played = GREATEST(seasons_played + $delta, 0) WHERE player_id = $this->player_id";
+        if (mysql_query($query)) {
+        $this->seasons_played += $delta;
+        return true;
+        } else {
+        return false;
+        }   
+    }
+   
+    
+    
+    // End Seasons Played and Wants to Retire ================================================================
+    
+    
+    
 
 	public function setff_bought($integer) {
         /**

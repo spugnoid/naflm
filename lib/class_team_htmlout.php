@@ -186,6 +186,10 @@ class Team_HTMLOUT extends Team
 			case 'buy_goods':       status($team->buy($_POST['thing'])); break;
 			case 'drop_goods':      status($team->drop($_POST['thing'])); break;
 			case 'ready_state':     status($team->setReady(isset($_POST['bool']))); break;
+			
+				// Add case for incrementing seasons played
+			case 's_played':        status($p->incr_splayed(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount'])); break;	
+				
 			case 'retire':          status(isset($_POST['bool']) && $team->setRetired(true)); break;
 			case 'delete':          status(isset($_POST['bool']) && $team->delete()); break;
 			case 'skill':
@@ -217,10 +221,6 @@ class Team_HTMLOUT extends Team
 						status($team->deleteLogo());
 				}
 				break;
-			// Increment player played seasons	
-			case 'add_player_season':    status($p->add_season()); break;
-				
-				
 		}
 
 		// Administrator tools used?
@@ -256,14 +256,14 @@ class Team_HTMLOUT extends Team
 				case 'removeNiggle': status($p->removeNiggle()); break;
 					
 					// My addition to add FF delta
-        case 'dff':
-        status($team->dffactor($dff = ($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']));
-        	if (Module::isRegistered('LogSubSys')) {
-        	Module::run('LogSubSys', array('createEntry', T_LOG_FF, $coach->coach_id, "Coach '$coach->name' (ID=$coach->coach_id) added a won FF delta for team '$team->name' (ID=$team->team_id) of amount = $dff"));
-					}
-					SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team->team_id));
-					break;    
-        // End my addition to ff
+				case 'dff':
+				status($team->dffactor($dff = ($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']));
+					if (Module::isRegistered('LogSubSys')) {
+					Module::run('LogSubSys', array('createEntry', T_LOG_FF, $coach->coach_id, "Coach '$coach->name' (ID=$coach->coach_id) added a won FF delta for team '$team->name' (ID=$team->team_id) of amount = $dff"));
+							}
+							SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team->team_id));
+							break;    
+				// End my addition to ff
 			}
 		}
 		$team->setStats(false,false,false); # Reload fields in case they changed after team actions made.
@@ -460,7 +460,7 @@ class Team_HTMLOUT extends Team
 			'mv_mvp'    => array('desc' => 'MVP'),
 			'mv_spp'    => array('desc' => ($DETAILED) ? 'SPP/extra' : 'SPP', 'nosort' => ($DETAILED) ? true : false),
 			'value'     => array('desc' => $lng->getTrn('common/value'), 'kilo' => true, 'suffix' => 'k'),
-			// Display columns for seasons played and wants to retire status
+			// Display columns for seasons played and wants to retire status on the team page
 			'seasons_played' => array('desc' => 'Seasons Played'),
 			'wants_retire' => array('desc' => 'Wants to Retire'),
 		);
@@ -1182,7 +1182,7 @@ class Team_HTMLOUT extends Team
 									<?php
 									break;
 								/***************
-								 * Remove achived skills
+								 * Remove achieved skills
 								 **************/
 								case 'ach_skills':
 									echo $lng->getTrn('profile/team/box_admin/desc/ach_skills');
@@ -1250,14 +1250,45 @@ class Team_HTMLOUT extends Team
 								case 'dff':
 									echo $lng->getTrn('profile/team/box_admin/desc/dff');
 									?>
-			<hr><br>
-			&Delta; team ff:<br>
-			<input type="radio" CHECKED name="sign" value="+">+
-			<input type="radio" name="sign" value="-">-
-			<input type='text' name="amount" maxlength=1 size=1>FF
-			<input type="hidden" name="type" value="dff">
-			<?php
+									<hr><br>
+									&Delta; team ff:<br>
+									<input type="radio" CHECKED name="sign" value="+">+
+									<input type="radio" name="sign" value="-">-
+									<input type='text' name="amount" maxlength=1 size=1>FF
+									<input type="hidden" name="type" value="dff">
+									<?php
 									break;
+									
+									
+									// need to add seasons played and want to retire here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+									
+									case 's_played':
+									echo $lng->getTrn('profile/team/box_tm/desc/s_played');
+									?>
+									<hr><br>
+									<?php echo $lng->getTrn('common/player');?>:<br>
+									<select name="player">
+									<?php
+									$DISABLE = true;
+									objsort($players, array('+is_dead', '+name'));
+									foreach ($players as $p) {
+										if (!$p->is_sold) {
+											echo "<option value='$p->player_id'".(($p->is_dead) ? ' style="background-color:'.COLOR_HTML_DEAD.';"' : '').">$p->nr $p->name</option>";
+											$DISABLE = false;
+										}
+									}
+									objsort($players, array('+nr'));
+									?>
+									</select>
+									<br><br>
+									<input type="radio" CHECKED name="sign" value="+">+
+									<input type="radio" name="sign" value="-">-
+									<input type='text' name='amount' maxlength="5" size="5"> &Delta; SPP
+									<input type="hidden" name="type" value="spp">
+									<?php
+									break;
+									
+									
 							}
 							?>
 							<br><br>
@@ -1317,7 +1348,10 @@ class Team_HTMLOUT extends Team
 				'buy_goods'         => $lng->getTrn($base.'/box_tm/buy_goods'),
 				'drop_goods'        => $lng->getTrn($base.'/box_tm/drop_goods'),
 				'ready_state'       => $lng->getTrn($base.'/box_tm/ready_state'),
-				'retire'            => $lng->getTrn($base.'/box_tm/retire'),
+				// Add seasons played increment
+				's_played'			=> $lng->getTrn($base.'/box_tm/s_played'),
+				// Add player wants to retire flag
+				'want2retire'          => $lng->getTrn($base.'/box_tm/want2retire'),
 				'delete'            => $lng->getTrn($base.'/box_tm/delete'),
 			);
 			# If one of these are selected from the menu, a JavaScript confirm prompt is displayed before submitting.
@@ -1589,6 +1623,61 @@ class Team_HTMLOUT extends Team
 					<input type="hidden" name="type" value="drop_goods">
 					<?php
 					break;
+					
+				/*======================================================================================================
+				* Add team management tools to increment seasons played and flag 'wants to retire'
+				======================================================================================================*/
+					
+				 /**************
+				 * Add a played season to player %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+				 **************/
+					
+								
+					case 's_played':
+									echo $lng->getTrn('profile/team/box_tm/desc/s_played');
+									?>
+									<hr><br>
+									<?php echo $lng->getTrn('common/player');?>:<br>
+									<select name="player">
+									<?php
+									$DISABLE = true;
+									objsort($players, array('+is_dead', '+name'));
+									foreach ($players as $p) {
+										if (!$p->is_sold) {
+											echo "<option value='$p->player_id'".(($p->is_dead) ? ' style="background-color:'.COLOR_HTML_DEAD.';"' : '').">$p->nr $p->name</option>";
+											$DISABLE = false;
+										}
+									}
+									objsort($players, array('+nr'));
+									?>
+									</select>
+									<br><br>
+									<input type="radio" CHECKED name="sign" value="+">+
+									<input type="radio" name="sign" value="-">-
+									<input type='text' name='amount' maxlength="5" size="5"> Add a Season?
+									<input type="hidden" name="type" value="s_played">
+									<?php
+									break;
+					
+				 /***************
+				 * Player wants to Retire
+				 **************/
+			
+		case 'want2retire':
+					echo $lng->getTrn('profile/team/box_tm/desc/want2retire');
+					?>
+					<hr><br>
+					<input type="checkbox" UNCHECKED name="bool" value="1"> Sure Does!
+					<input type="hidden" name="type" value="want2retire">
+					<?php
+					break;
+			
+					
+				/*======================================================================================================
+				* End Add team management tools to increment seasons played and flag 'wants to retire'
+				======================================================================================================*/
+					
+					
 				/**************
 				 * Set ready state
 				 **************/

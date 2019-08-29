@@ -372,6 +372,19 @@ class Player
         $query = "UPDATE players SET extra_spp = IF(extra_spp IS NULL, $delta, extra_spp + ($delta)) WHERE player_id = $this->player_id";
         return mysql_query($query);
     }
+    
+    
+    // Increment player seasons played %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    public function incr_splayed($delta) {
+        $query = "UPDATE players SET seasons_played = IF(seasons_played IS NULL, $delta, seasons_played + ($delta)) WHERE player_id = $this->player_id";
+        return mysql_query($query);
+    }
+    
+    
+    
+    
+    
 
     public function dval($val = 0) {
         $query = "UPDATE players SET extra_val = $val WHERE player_id = $this->player_id";

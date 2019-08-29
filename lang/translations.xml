@@ -317,6 +317,8 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                 <buy_goods_warn> <![CDATA[ <br><br>Please note that re-roll prices are currently <font color='red'><b>doubled</b></font>.<br>If your intention is to buy a non-doubled RR, then buy it anyway and reclaim the lost gold by asking an admin to reinsert the overcharged amount. ]]> </buy_goods_warn>
                 <drop_goods> <![CDATA[ Let go/drop of team goods for no refund. ]]> </drop_goods>
                 <ready_state> <![CDATA[ This team attribute allows coaches to signal other coaches/teams whether or not this team is interested in playing any matches. ]]> </ready_state>
+                <s_played><![CDATA[ Add a completed season to a player's record. Increases the chance they will want to retire. ]]></s_played>
+                <want2retire><![CDATA[ This player wants to retire. Re-hiring them each successive season will cost an additional 20k gp. ]]></want2retire>
                 <retire> <![CDATA[ Retire team.<br>Once retired the team is no longer manageable.<br>Admins can un-retire teams. The retirement takes effect immediately, but will first be visible on <b>next page reload</b>. ]]> </retire>
                 <delete> <![CDATA[ Delete team.<br>For the sake of keeping league statistics intact you are not allowed to delete teams which have played matches. The deletion takes effect immediately, but will first be visible on <b>next page reload</b>. ]]> </delete>
             </desc>
@@ -335,6 +337,7 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
             <ach_skills>Remove ach. player skills</ach_skills>
             <ff>Manage team fan factor</ff>
             <removeNiggle>Remove player niggle</removeNiggle>
+            <dff>Redraft FF Change</dff>
 
             <desc>
                 <unhire_journeyman> <![CDATA[ Regret permanently hiring a journeyman.<br> This only works on players from a 0-16 allowed position on your team's roster. ]]> </unhire_journeyman>
@@ -348,6 +351,7 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                 <ach_skills> <![CDATA[ Remove a players achieved skills. This makes the player able to rechoose a skill. ]]> </ach_skills>
                 <ff> <![CDATA[ Make changes to team's fan factor .]]> </ff>
                 <removeNiggle> <![CDATA[ Remove one of a players niggling injuries.]]> </removeNiggle>
+                <dff> <![CDATA[ Change FF for Redraft. ]]> </dff>
             </desc>
         </box_admin>
     </team>
