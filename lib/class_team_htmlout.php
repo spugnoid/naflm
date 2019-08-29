@@ -217,6 +217,10 @@ class Team_HTMLOUT extends Team
 						status($team->deleteLogo());
 				}
 				break;
+			// Increment player played seasons	
+			case 'add_player_season':    status($p->add_season()); break;
+				
+				
 		}
 
 		// Administrator tools used?
@@ -952,6 +956,7 @@ class Team_HTMLOUT extends Team
 							'ach_skills'        => $lng->getTrn($base.'/box_admin/ach_skills'),
 							'ff'                => $lng->getTrn($base.'/box_admin/ff'),
 							'removeNiggle'      => $lng->getTrn($base.'/box_admin/removeNiggle'),
+							'dff'               => $lng->getTrn($base.'/box_admin/dff'),
 						);
 						// Set default choice.
 						if (!isset($_POST['menu_admintools'])) {
@@ -1228,6 +1233,20 @@ class Team_HTMLOUT extends Team
 									</select>
 									<input type="hidden" name="type" value="removeNiggle">
 									<?php
+									break;
+									/***************
+								 * Adjust FF for Redraft
+								 **************/
+								case 'dff':
+									echo $lng->getTrn('profile/team/box_admin/desc/dff');
+									?>
+			<hr><br>
+			&Delta; team ff:<br>
+			<input type="radio" CHECKED name="sign" value="+">+
+			<input type="radio" name="sign" value="-">-
+			<input type='text' name="amount" maxlength=1 size=1>FF
+			<input type="hidden" name="type" value="dff">
+			<?php
 									break;
 							}
 							?>
