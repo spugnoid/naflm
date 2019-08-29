@@ -10,7 +10,7 @@ die ('Could not connect:' . mysql_error());
 }
 mysql_select_db($db_name, $connection);
 
-$added= mysql_query("ALTER TABLE players ADD COLUMN seasons_played TINYINT SIGNED");
+$added= mysql_query("ALTER TABLE players ADD COLUMN seasons_played TINYINT SIGNED NOT NULL");
 $added= mysql_query("ALTER TABLE players ADD COLUMN wants_retire BOOLEAN NOT NULL DEFAULT FALSE");
 
 if($added !== FALSE)
