@@ -98,6 +98,7 @@ class Team_HTMLOUT extends Team
 			'ass_coaches'  => array('desc' => 'Ass. coaches'),
 			'cheerleaders' => array('desc' => 'Cheerleaders'),
 			'treasury'     => array('desc' => 'Treasury', 'kilo' => true, 'suffix' => 'k'),
+            'ff'           => array('desc' => 'Won Fan Factor'),    // Added to adjust won FF for redraft
 			'tv'           => array('desc' => 'TV', 'kilo' => true, 'suffix' => 'k'),
 		);
 
@@ -138,11 +139,11 @@ class Team_HTMLOUT extends Team
 		}
 		if (isset($_GET['subsec'])){
 			?>
-			<!-- Following HTML from ./lib/class_team_htmlout.php profile -->
-			<script language="JavaScript" type="text/javascript">
-			window.location = "#anc";
-			</script>
-			<?php
+<!-- Following HTML from ./lib/class_team_htmlout.php profile -->
+<script language="JavaScript" type="text/javascript">
+	window.location = "#anc";
+</script>
+<?php
 		}
 	}
 
@@ -231,7 +232,7 @@ class Team_HTMLOUT extends Team
 						Module::run('LogSubSys', array('createEntry', T_LOG_GOLDBANK, $coach->coach_id, "Coach '$coach->name' (ID=$coach->coach_id) added a treasury delta for team '$team->name' (ID=$team->team_id) of amount = $dtreas"));
 					}
 					SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team->team_id));
-					break;
+					break;   
 				case 'spp':               status($p->dspp(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount'])); break;
 				case 'dval':              status($p->dval(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']*1000)); break;
 				case 'extra_skills':
@@ -250,6 +251,17 @@ class Team_HTMLOUT extends Team
 					SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team->team_id));
 					break;
 				case 'removeNiggle': status($p->removeNiggle()); break;
+                    
+        // My addition to add FF delta
+        case 'dff':
+        status($team->dffactor($dff = ($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']));
+        	if (Module::isRegistered('LogSubSys')) {
+        	Module::run('LogSubSys', array('createEntry', T_LOG_FF, $coach->coach_id, "Coach '$coach->name' (ID=$coach->coach_id) added a won FF delta for team '$team->name' (ID=$team->team_id) of amount = $dff"));
+					}
+					SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team->team_id));
+					break;    
+        // End my addition to ff
+					
 			}
 		}
 		$team->setStats(false,false,false); # Reload fields in case they changed after team actions made.
@@ -458,27 +470,43 @@ class Team_HTMLOUT extends Team
 			array('color' => ($DETAILED) ? true : false, 'doNr' => false, 'noHelp' => true)
 		);
 		?>
-		<!-- Following HTML is from class_team_htmlout.php _roster -->
-		<table class="text">
-			<tr>
-				<td style="width: 100%;"> </td>
-				<?php
+<!-- Following HTML is from class_team_htmlout.php _roster -->
+<table class="text">
+	<tr>
+		<td style="width: 100%;"> </td>
+		<?php
 				if ($DETAILED) {
 					?>
-					<td style="background-color: <?php echo COLOR_HTML_READY;   ?>;"><font color='black'><b>&nbsp;Ready&nbsp;</b></font></td>
-					<td style="background-color: <?php echo COLOR_HTML_MNG;     ?>;"><font color='black'><b>&nbsp;MNG&nbsp;</b></font></td>
-					<td style="background-color: <?php echo COLOR_HTML_JOURNEY; ?>;"><font color='black'><b>&nbsp;Journey&nbsp;</b></font></td>
-					<td style="background-color: <?php echo COLOR_HTML_JOURNEY_USED; ?>;"><font color='black'><b>&nbsp;Used&nbsp;journey&nbsp;</b></font></td>
-					<td style="background-color: <?php echo COLOR_HTML_DEAD;    ?>;"><font color='black'><b>&nbsp;Dead&nbsp;</b></font></td>
-					<td style="background-color: <?php echo COLOR_HTML_SOLD;    ?>;"><font color='black'><b>&nbsp;Sold&nbsp;</b></font></td>
-					<td style="background-color: <?php echo COLOR_HTML_STARMERC;?>;"><font color='black'><b>&nbsp;Star/merc&nbsp;</b></font></td>
-					<td style="background-color: <?php echo COLOR_HTML_NEWSKILL;?>;"><font color='black'><b>&nbsp;New&nbsp;skill&nbsp;</b></font></td>
-					<?php
+		<td style="background-color: <?php echo COLOR_HTML_READY;   ?>;">
+			<font color='black'><b>&nbsp;Ready&nbsp;</b></font>
+		</td>
+		<td style="background-color: <?php echo COLOR_HTML_MNG;     ?>;">
+			<font color='black'><b>&nbsp;MNG&nbsp;</b></font>
+		</td>
+		<td style="background-color: <?php echo COLOR_HTML_JOURNEY; ?>;">
+			<font color='black'><b>&nbsp;Journey&nbsp;</b></font>
+		</td>
+		<td style="background-color: <?php echo COLOR_HTML_JOURNEY_USED; ?>;">
+			<font color='black'><b>&nbsp;Used&nbsp;journey&nbsp;</b></font>
+		</td>
+		<td style="background-color: <?php echo COLOR_HTML_DEAD;    ?>;">
+			<font color='black'><b>&nbsp;Dead&nbsp;</b></font>
+		</td>
+		<td style="background-color: <?php echo COLOR_HTML_SOLD;    ?>;">
+			<font color='black'><b>&nbsp;Sold&nbsp;</b></font>
+		</td>
+		<td style="background-color: <?php echo COLOR_HTML_STARMERC;?>;">
+			<font color='black'><b>&nbsp;Star/merc&nbsp;</b></font>
+		</td>
+		<td style="background-color: <?php echo COLOR_HTML_NEWSKILL;?>;">
+			<font color='black'><b>&nbsp;New&nbsp;skill&nbsp;</b></font>
+		</td>
+		<?php
 				}
 				?>
-			</tr>
-		</table>
-		<?php
+	</tr>
+</table>
+<?php
 	}
 
 	private function _menu($ALLOW_EDIT, $DETAILED) {
@@ -486,115 +514,346 @@ class Team_HTMLOUT extends Team
 		$team = $this; // Copy. Used instead of $this for readability.
 		$url = urlcompile(T_URL_PROFILE,T_OBJ_TEAM,$this->team_id,false,false);
 		?>
-		<!-- Following HTML is from class_team_htmlout.php _menu -->
-		<!-- Cyanide module team color style -->
-		<style type="text/css">
-		#cycolors {
+<!-- Following HTML is from class_team_htmlout.php _menu -->
+<!-- Cyanide module team color style -->
+<style type="text/css">
+	#cycolors {
 		width: 128px;
 		height: 112px;
 		position: relative;
 		background-image: url(images/cycolors.jpg);
 		background-repeat: no-repeat;
-		}
+	}
 
-		#cycolors ul {
+	#cycolors ul {
 		margin: 0;
 		padding: 0;
-		padding-bottom:0px;padding-left:0px;padding-right:0px;padding-top:0px;
+		padding-bottom: 0px;
+		padding-left: 0px;
+		padding-right: 0px;
+		padding-top: 0px;
 		list-style: none;
-		}
+	}
 
-		#cycolors a {
+	#cycolors a {
 		position: absolute;
 		width: 15px;
 		height: 15px;
 		text-indent: -1000em;
-		padding-bottom:0px;padding-left:0px;padding-right:0px;padding-top:0px;
-		border-bottom:0px;border-left:0px;border-top:0px;border-right:0px;
-		}
+		padding-bottom: 0px;
+		padding-left: 0px;
+		padding-right: 0px;
+		padding-top: 0px;
+		border-bottom: 0px;
+		border-left: 0px;
+		border-top: 0px;
+		border-right: 0px;
+	}
 
-		#cycolors a:hover { border: 1px solid #fff; }
+	#cycolors a:hover {
+		border: 1px solid #fff;
+	}
 
-		#cycolors .blue1 a {top: 0px;left: 0px;}
-		#cycolors .cyan1 a {top: 0px;left: 16px;}
-		#cycolors .green1 a {top: 0px;left: 32px;}
-		#cycolors .yellow1 a {top: 0px;left: 48px;}
-		#cycolors .red1 a {top: 0px;left: 64px;}
-		#cycolors .magenta1 a {top: 0px;left: 80px;}
-		#cycolors .purple1 a {top: 0px;left: 96px;}
-		#cycolors .grey1 a {top: 0px;left: 112px;}
+	#cycolors .blue1 a {
+		top: 0px;
+		left: 0px;
+	}
 
-		#cycolors .blue2 a {top: 16px;left: 0px;}
-		#cycolors .cyan2 a {top: 16px;left: 16px;}
-		#cycolors .green2 a {top: 16px;left: 32px;}
-		#cycolors .yellow2 a {top: 16px;left: 48px;}
-		#cycolors .red2 a {top: 16px;left: 64px;}
-		#cycolors .magenta2 a {top: 16px;left: 80px;}
-		#cycolors .purple2 a {top: 16px;left: 96px;}
-		#cycolors .grey2 a {top: 16px;left: 112px;}
+	#cycolors .cyan1 a {
+		top: 0px;
+		left: 16px;
+	}
 
-		#cycolors .blue3 a {top: 32px;left: 0px;}
-		#cycolors .cyan3 a {top: 32px;left: 16px;}
-		#cycolors .green3 a {top: 32px;left: 32px;}
-		#cycolors .yellow3 a {top: 32px;left: 48px;}
-		#cycolors .red3 a {top: 32px;left: 64px;}
-		#cycolors .magenta3 a {top: 32px;left: 80px;}
-		#cycolors .purple3 a {top: 32px;left: 96px;}
-		#cycolors .grey3 a {top: 32px;left: 112px;}
+	#cycolors .green1 a {
+		top: 0px;
+		left: 32px;
+	}
 
-		#cycolors .blue4 a {top:48px;left: 0px;}
-		#cycolors .cyan4 a {top:48px;left: 16px;}
-		#cycolors .green4 a {top:48px;left: 32px;}
-		#cycolors .yellow4 a {top:48px;left: 48px;}
-		#cycolors .red4 a {top:48px;left: 64px;}
-		#cycolors .magenta4 a {top:48px;left: 80px;}
-		#cycolors .purple4 a {top:48px;left: 96px;}
-		#cycolors .grey4 a {top:48px;left: 112px;}
+	#cycolors .yellow1 a {
+		top: 0px;
+		left: 48px;
+	}
 
-		#cycolors .blue5 a {top:64px;left: 0px;}
-		#cycolors .cyan5 a {top:64px;left: 16px;}
-		#cycolors .green5 a {top:64px;left: 32px;}
-		#cycolors .yellow5 a {top:64px;left: 48px;}
-		#cycolors .red5 a {top:64px;left: 64px;}
-		#cycolors .magenta5 a {top:64px;left: 80px;}
-		#cycolors .purple5 a {top:64px;left: 96px;}
-		#cycolors .grey5 a {top:64px;left: 112px;}
+	#cycolors .red1 a {
+		top: 0px;
+		left: 64px;
+	}
 
-		#cycolors .blue6 a {top:80px;left: 0px;}
-		#cycolors .cyan6 a {top:80px;left: 16px;}
-		#cycolors .green6 a {top:80px;left: 32px;}
-		#cycolors .yellow6 a {top:80px;left: 48px;}
-		#cycolors .red6 a {top:80px;left: 64px;}
-		#cycolors .magenta6 a {top:80px;left: 80px;}
-		#cycolors .purple6 a {top:80px;left: 96px;}
-		#cycolors .grey6 a {top:80px;left: 112px;}
+	#cycolors .magenta1 a {
+		top: 0px;
+		left: 80px;
+	}
 
-		#cycolors .blue7 a {top:96px;left: 0px;}
-		#cycolors .cyan7 a {top:96px;left: 16px;}
-		#cycolors .green7 a {top:96px;left: 32px;}
-		#cycolors .yellow7 a {top:96px;left: 48px;}
-		#cycolors .red7 a {top:96px;left: 64px;}
-		#cycolors .magenta7 a {top:96px;left: 80px;}
-		#cycolors .purple7 a {top:96px;left: 96px;}
-		#cycolors .grey7 a {top:96px;left: 112px;}
-		</style>
+	#cycolors .purple1 a {
+		top: 0px;
+		left: 96px;
+	}
 
-		<ul class="css3menu1 topmenu" style="position:static; z-index:0;">
-			<li class="topfirst"><a href="<?php echo $url.'&amp;subsec=man';?>"><?php echo $lng->getTrn('profile/team/tmanage');?></a></li>
-			<li class="topmenu"><a href="<?php echo $url.'&amp;subsec=news';?>"><?php echo $lng->getTrn('profile/team/news');?></a></li>
-			<li><a href="<?php echo $url.'&amp;subsec=about';?>"><?php echo $lng->getTrn('common/about');?></a></li>
-			<li><a href="<?php echo $url.'&amp;subsec=games';?>"><?php echo $lng->getTrn('profile/team/games');?></a></li>
-			<?php
+	#cycolors .grey1 a {
+		top: 0px;
+		left: 112px;
+	}
+
+	#cycolors .blue2 a {
+		top: 16px;
+		left: 0px;
+	}
+
+	#cycolors .cyan2 a {
+		top: 16px;
+		left: 16px;
+	}
+
+	#cycolors .green2 a {
+		top: 16px;
+		left: 32px;
+	}
+
+	#cycolors .yellow2 a {
+		top: 16px;
+		left: 48px;
+	}
+
+	#cycolors .red2 a {
+		top: 16px;
+		left: 64px;
+	}
+
+	#cycolors .magenta2 a {
+		top: 16px;
+		left: 80px;
+	}
+
+	#cycolors .purple2 a {
+		top: 16px;
+		left: 96px;
+	}
+
+	#cycolors .grey2 a {
+		top: 16px;
+		left: 112px;
+	}
+
+	#cycolors .blue3 a {
+		top: 32px;
+		left: 0px;
+	}
+
+	#cycolors .cyan3 a {
+		top: 32px;
+		left: 16px;
+	}
+
+	#cycolors .green3 a {
+		top: 32px;
+		left: 32px;
+	}
+
+	#cycolors .yellow3 a {
+		top: 32px;
+		left: 48px;
+	}
+
+	#cycolors .red3 a {
+		top: 32px;
+		left: 64px;
+	}
+
+	#cycolors .magenta3 a {
+		top: 32px;
+		left: 80px;
+	}
+
+	#cycolors .purple3 a {
+		top: 32px;
+		left: 96px;
+	}
+
+	#cycolors .grey3 a {
+		top: 32px;
+		left: 112px;
+	}
+
+	#cycolors .blue4 a {
+		top: 48px;
+		left: 0px;
+	}
+
+	#cycolors .cyan4 a {
+		top: 48px;
+		left: 16px;
+	}
+
+	#cycolors .green4 a {
+		top: 48px;
+		left: 32px;
+	}
+
+	#cycolors .yellow4 a {
+		top: 48px;
+		left: 48px;
+	}
+
+	#cycolors .red4 a {
+		top: 48px;
+		left: 64px;
+	}
+
+	#cycolors .magenta4 a {
+		top: 48px;
+		left: 80px;
+	}
+
+	#cycolors .purple4 a {
+		top: 48px;
+		left: 96px;
+	}
+
+	#cycolors .grey4 a {
+		top: 48px;
+		left: 112px;
+	}
+
+	#cycolors .blue5 a {
+		top: 64px;
+		left: 0px;
+	}
+
+	#cycolors .cyan5 a {
+		top: 64px;
+		left: 16px;
+	}
+
+	#cycolors .green5 a {
+		top: 64px;
+		left: 32px;
+	}
+
+	#cycolors .yellow5 a {
+		top: 64px;
+		left: 48px;
+	}
+
+	#cycolors .red5 a {
+		top: 64px;
+		left: 64px;
+	}
+
+	#cycolors .magenta5 a {
+		top: 64px;
+		left: 80px;
+	}
+
+	#cycolors .purple5 a {
+		top: 64px;
+		left: 96px;
+	}
+
+	#cycolors .grey5 a {
+		top: 64px;
+		left: 112px;
+	}
+
+	#cycolors .blue6 a {
+		top: 80px;
+		left: 0px;
+	}
+
+	#cycolors .cyan6 a {
+		top: 80px;
+		left: 16px;
+	}
+
+	#cycolors .green6 a {
+		top: 80px;
+		left: 32px;
+	}
+
+	#cycolors .yellow6 a {
+		top: 80px;
+		left: 48px;
+	}
+
+	#cycolors .red6 a {
+		top: 80px;
+		left: 64px;
+	}
+
+	#cycolors .magenta6 a {
+		top: 80px;
+		left: 80px;
+	}
+
+	#cycolors .purple6 a {
+		top: 80px;
+		left: 96px;
+	}
+
+	#cycolors .grey6 a {
+		top: 80px;
+		left: 112px;
+	}
+
+	#cycolors .blue7 a {
+		top: 96px;
+		left: 0px;
+	}
+
+	#cycolors .cyan7 a {
+		top: 96px;
+		left: 16px;
+	}
+
+	#cycolors .green7 a {
+		top: 96px;
+		left: 32px;
+	}
+
+	#cycolors .yellow7 a {
+		top: 96px;
+		left: 48px;
+	}
+
+	#cycolors .red7 a {
+		top: 96px;
+		left: 64px;
+	}
+
+	#cycolors .magenta7 a {
+		top: 96px;
+		left: 80px;
+	}
+
+	#cycolors .purple7 a {
+		top: 96px;
+		left: 96px;
+	}
+
+	#cycolors .grey7 a {
+		top: 96px;
+		left: 112px;
+	}
+</style>
+
+<ul class="css3menu1 topmenu" style="position:static; z-index:0;">
+	<li class="topfirst"><a href="<?php echo $url.'&amp;subsec=man';?>"><?php echo $lng->getTrn('profile/team/tmanage');?></a></li>
+	<li class="topmenu"><a href="<?php echo $url.'&amp;subsec=news';?>"><?php echo $lng->getTrn('profile/team/news');?></a></li>
+	<li><a href="<?php echo $url.'&amp;subsec=about';?>"><?php echo $lng->getTrn('common/about');?></a></li>
+	<li><a href="<?php echo $url.'&amp;subsec=games';?>"><?php echo $lng->getTrn('profile/team/games');?></a></li>
+	<?php
 			echo "<li><a href='${url}&amp;subsec=hhstar'>".$lng->getTrn('common/starhh')."</a></li>\n";
 			echo "<li><a href='${url}&amp;subsec=hhmerc'>".$lng->getTrn('common/merchh')."</a></li>\n";
 			
 			$pdf    = (Module::isRegistered('PDFroster')) ? "handler.php?type=roster&amp;team_id=$this->team_id&amp;detailed=".($DETAILED ? '1' : '0') : '';
+			
+			$pdf2    = (Module::isRegistered('PDFrosterredraft')) ? "handler.php?type=roster&amp;team_id=$this->team_id&amp;detailed=".($DETAILED ? '1' : '0') : ''; //added this to try to make separate roster sheet for redrafting
+			
 			$botocs = (Module::isRegistered('XML_BOTOCS') && $settings['leegmgr_botocs']) ? "handler.php?type=botocsxml&amp;teamid=$this->team_id" : '';
 			$cyanide = (Module::isRegistered('XML_BOTOCS') && $settings['leegmgr_cyanide']) ? "handler.php?type=botocsxml&amp;teamid=$this->team_id&amp;cy" : '';
 			if ($pdf || $botocs) {
 			?>
-			
-			<?php
+
+	<?php
 			}
 			if (Module::isRegistered('IndcPage')) {
 				echo "<li><a href='handler.php?type=inducements&amp;team_id=$team->team_id'>Inducements try-out</a></li>\n";
@@ -606,85 +865,88 @@ class Team_HTMLOUT extends Team
 				echo "<li><a href='handler.php?type=cemetery&amp;tid=$team->team_id'>".$lng->getTrn('name', 'Cemetery')."</a></li>\n";
 			}
 			?>
-			
-			<li class="toplast"><a>Roster</a>
+
+	<li class="toplast"><a>Roster</a>
+		<ul>
+			<?php if ($pdf)    { ?><li class="subfirst"><a TARGET="_blank" href="<?php echo $pdf;?>">PDF</a></li> <?php } ?>
+
+			<?php if ($pdf2)    { ?><li class="subfirst"><a TARGET="_blank" href="<?php echo $pdf2;?>">Re-Draft</a></li> <?php } ?>
+
+			<?php if ($botocs) { ?><li><a TARGET="_blank" href="<?php echo $botocs;?>">BOTOCS-XML</a></li> <?php } ?>
+			<?php if ($cyanide) { ?><li><span class="dir">Cyanide-DB</span>
 				<ul>
-					<?php if ($pdf)    { ?><li class="subfirst"><a TARGET="_blank" href="<?php echo $pdf;?>">PDF</a></li> <?php } ?>
-					<?php if ($botocs) { ?><li><a TARGET="_blank" href="<?php echo $botocs;?>">BOTOCS-XML</a></li> <?php } ?>
-					<?php if ($cyanide) { ?><li><span class="dir">Cyanide-DB</span>
-						<ul>
-						<div id="cycolors">
-								<li class="blue1"><a href="<?php echo $cyanide."=0";?>">0</a></li>
-								<li class="cyan1"><a href="<?php echo $cyanide."=1";?>">1</a></li>
-								<li class="green1"><a href="<?php echo $cyanide."=2";?>">2</a></li>
-								<li class="yellow1"><a href="<?php echo $cyanide."=3";?>">3</a></li>
-								<li class="red1"><a href="<?php echo $cyanide."=4";?>">4</a></li>
-								<li class="magenta1"><a href="<?php echo $cyanide."=5";?>">5</a></li>
-								<li class="purple1"><a href="<?php echo $cyanide."=6";?>">6</a></li>
-								<li class="grey1"><a href="<?php echo $cyanide."=7";?>">7</a></li>
+					<div id="cycolors">
+						<li class="blue1"><a href="<?php echo $cyanide."=0";?>">0</a></li>
+						<li class="cyan1"><a href="<?php echo $cyanide."=1";?>">1</a></li>
+						<li class="green1"><a href="<?php echo $cyanide."=2";?>">2</a></li>
+						<li class="yellow1"><a href="<?php echo $cyanide."=3";?>">3</a></li>
+						<li class="red1"><a href="<?php echo $cyanide."=4";?>">4</a></li>
+						<li class="magenta1"><a href="<?php echo $cyanide."=5";?>">5</a></li>
+						<li class="purple1"><a href="<?php echo $cyanide."=6";?>">6</a></li>
+						<li class="grey1"><a href="<?php echo $cyanide."=7";?>">7</a></li>
 
-								<li class="blue2"><a href="<?php echo $cyanide."=8";?>">0</a></li>
-								<li class="cyan2"><a href="<?php echo $cyanide."=9";?>">1</a></li>
-								<li class="green2"><a href="<?php echo $cyanide."=10";?>">2</a></li>
-								<li class="yellow2"><a href="<?php echo $cyanide."=11";?>">3</a></li>
-								<li class="red2"><a href="<?php echo $cyanide."=12";?>">4</a></li>
-								<li class="magenta2"><a href="<?php echo $cyanide."=13";?>">5</a></li>
-								<li class="purple2"><a href="<?php echo $cyanide."=14";?>">6</a></li>
-								<li class="grey2"><a href="<?php echo $cyanide."=15";?>">7</a></li>
+						<li class="blue2"><a href="<?php echo $cyanide."=8";?>">0</a></li>
+						<li class="cyan2"><a href="<?php echo $cyanide."=9";?>">1</a></li>
+						<li class="green2"><a href="<?php echo $cyanide."=10";?>">2</a></li>
+						<li class="yellow2"><a href="<?php echo $cyanide."=11";?>">3</a></li>
+						<li class="red2"><a href="<?php echo $cyanide."=12";?>">4</a></li>
+						<li class="magenta2"><a href="<?php echo $cyanide."=13";?>">5</a></li>
+						<li class="purple2"><a href="<?php echo $cyanide."=14";?>">6</a></li>
+						<li class="grey2"><a href="<?php echo $cyanide."=15";?>">7</a></li>
 
-								<li class="blue3"><a href="<?php echo $cyanide."=16";?>">16</a></li>
-								<li class="cyan3"><a href="<?php echo $cyanide."=17";?>">17</a></li>
-								<li class="green3"><a href="<?php echo $cyanide."=18";?>">18</a></li>
-								<li class="yellow3"><a href="<?php echo $cyanide."=19";?>">19</a></li>
-								<li class="red3"><a href="<?php echo $cyanide."=20";?>">20</a></li>
-								<li class="magenta3"><a href="<?php echo $cyanide."=21";?>">21</a></li>
-								<li class="purple3"><a href="<?php echo $cyanide."=22";?>">22</a></li>
-								<li class="grey3"><a href="<?php echo $cyanide."=23";?>">23</a></li>
+						<li class="blue3"><a href="<?php echo $cyanide."=16";?>">16</a></li>
+						<li class="cyan3"><a href="<?php echo $cyanide."=17";?>">17</a></li>
+						<li class="green3"><a href="<?php echo $cyanide."=18";?>">18</a></li>
+						<li class="yellow3"><a href="<?php echo $cyanide."=19";?>">19</a></li>
+						<li class="red3"><a href="<?php echo $cyanide."=20";?>">20</a></li>
+						<li class="magenta3"><a href="<?php echo $cyanide."=21";?>">21</a></li>
+						<li class="purple3"><a href="<?php echo $cyanide."=22";?>">22</a></li>
+						<li class="grey3"><a href="<?php echo $cyanide."=23";?>">23</a></li>
 
-								<li class="blue4"><a href="<?php echo $cyanide."=24";?>">24</a></li>
-								<li class="cyan4"><a href="<?php echo $cyanide."=25";?>">25</a></li>
-								<li class="green4"><a href="<?php echo $cyanide."=26";?>">26</a></li>
-								<li class="yellow4"><a href="<?php echo $cyanide."=27";?>">27</a></li>
-								<li class="red4"><a href="<?php echo $cyanide."=28";?>">28</a></li>
-								<li class="magenta4"><a href="<?php echo $cyanide."=29";?>">29</a></li>
-								<li class="purple4"><a href="<?php echo $cyanide."=30";?>">30</a></li>
-								<li class="grey4"><a href="<?php echo $cyanide."=31";?>">31</a></li>
+						<li class="blue4"><a href="<?php echo $cyanide."=24";?>">24</a></li>
+						<li class="cyan4"><a href="<?php echo $cyanide."=25";?>">25</a></li>
+						<li class="green4"><a href="<?php echo $cyanide."=26";?>">26</a></li>
+						<li class="yellow4"><a href="<?php echo $cyanide."=27";?>">27</a></li>
+						<li class="red4"><a href="<?php echo $cyanide."=28";?>">28</a></li>
+						<li class="magenta4"><a href="<?php echo $cyanide."=29";?>">29</a></li>
+						<li class="purple4"><a href="<?php echo $cyanide."=30";?>">30</a></li>
+						<li class="grey4"><a href="<?php echo $cyanide."=31";?>">31</a></li>
 
-								<li class="blue5"><a href="<?php echo $cyanide."=32";?>">32</a></li>
-								<li class="cyan5"><a href="<?php echo $cyanide."=33";?>">33</a></li>
-								<li class="green5"><a href="<?php echo $cyanide."=34";?>">34</a></li>
-								<li class="yellow5"><a href="<?php echo $cyanide."=35";?>">35</a></li>
-								<li class="red5"><a href="<?php echo $cyanide."=36";?>">36</a></li>
-								<li class="magenta5"><a href="<?php echo $cyanide."=37";?>">37</a></li>
-								<li class="purple5"><a href="<?php echo $cyanide."=38";?>">38</a></li>
-								<li class="grey5"><a href="<?php echo $cyanide."=39";?>">39</a></li>
+						<li class="blue5"><a href="<?php echo $cyanide."=32";?>">32</a></li>
+						<li class="cyan5"><a href="<?php echo $cyanide."=33";?>">33</a></li>
+						<li class="green5"><a href="<?php echo $cyanide."=34";?>">34</a></li>
+						<li class="yellow5"><a href="<?php echo $cyanide."=35";?>">35</a></li>
+						<li class="red5"><a href="<?php echo $cyanide."=36";?>">36</a></li>
+						<li class="magenta5"><a href="<?php echo $cyanide."=37";?>">37</a></li>
+						<li class="purple5"><a href="<?php echo $cyanide."=38";?>">38</a></li>
+						<li class="grey5"><a href="<?php echo $cyanide."=39";?>">39</a></li>
 
-								<li class="blue6"><a href="<?php echo $cyanide."=40";?>">40</a></li>
-								<li class="cyan6"><a href="<?php echo $cyanide."=41";?>">41</a></li>
-								<li class="green6"><a href="<?php echo $cyanide."=42";?>">42</a></li>
-								<li class="yellow6"><a href="<?php echo $cyanide."=43";?>">43</a></li>
-								<li class="red6"><a href="<?php echo $cyanide."=44";?>">44</a></li>
-								<li class="magenta6"><a href="<?php echo $cyanide."=45";?>">45</a></li>
-								<li class="purple6"><a href="<?php echo $cyanide."=46";?>">46</a></li>
-								<li class="grey6"><a href="<?php echo $cyanide."=47";?>">47</a></li>
+						<li class="blue6"><a href="<?php echo $cyanide."=40";?>">40</a></li>
+						<li class="cyan6"><a href="<?php echo $cyanide."=41";?>">41</a></li>
+						<li class="green6"><a href="<?php echo $cyanide."=42";?>">42</a></li>
+						<li class="yellow6"><a href="<?php echo $cyanide."=43";?>">43</a></li>
+						<li class="red6"><a href="<?php echo $cyanide."=44";?>">44</a></li>
+						<li class="magenta6"><a href="<?php echo $cyanide."=45";?>">45</a></li>
+						<li class="purple6"><a href="<?php echo $cyanide."=46";?>">46</a></li>
+						<li class="grey6"><a href="<?php echo $cyanide."=47";?>">47</a></li>
 
-								<li class="blue7"><a href="<?php echo $cyanide."=48";?>">48</a></li>
-								<li class="cyan7"><a href="<?php echo $cyanide."=49";?>">49</a></li>
-								<li class="green7"><a href="<?php echo $cyanide."=50";?>">50</a></li>
-								<li class="yellow7"><a href="<?php echo $cyanide."=51";?>">51</a></li>
-								<li class="red7"><a href="<?php echo $cyanide."=52";?>">52</a></li>
-								<li class="magenta7"><a href="<?php echo $cyanide."=53";?>">53</a></li>
-								<li class="purple7"><a href="<?php echo $cyanide."=54";?>">54</a></li>
-								<li class="grey7"><a href="<?php echo $cyanide."=55";?>">55</a></li>
-						</div>
-						</ul>
-					</li>
-					<?php } ?>
+						<li class="blue7"><a href="<?php echo $cyanide."=48";?>">48</a></li>
+						<li class="cyan7"><a href="<?php echo $cyanide."=49";?>">49</a></li>
+						<li class="green7"><a href="<?php echo $cyanide."=50";?>">50</a></li>
+						<li class="yellow7"><a href="<?php echo $cyanide."=51";?>">51</a></li>
+						<li class="red7"><a href="<?php echo $cyanide."=52";?>">52</a></li>
+						<li class="magenta7"><a href="<?php echo $cyanide."=53";?>">53</a></li>
+						<li class="purple7"><a href="<?php echo $cyanide."=54";?>">54</a></li>
+						<li class="grey7"><a href="<?php echo $cyanide."=55";?>">55</a></li>
+					</div>
 				</ul>
 			</li>
+			<?php } ?>
 		</ul>
-		<br>
-		<?php
+	</li>
+</ul>
+<br>
+<?php
 	}
 
 	private function _HHMerc($DETAILED)	{
@@ -775,122 +1037,124 @@ class Team_HTMLOUT extends Team
 		$team = $this; // Copy. Used instead of $this for readability.
 		$JMP_ANC = (isset($_POST['menu_tmanage']) || isset($_POST['menu_admintools'])); # Jump condition MUST be set here due to _POST variables being changed later.
 		?>
-		<!-- Following HTML is from class_team_htmlout.php _actionBoxes -->
-		<a name="aanc"></a>
-		<div class="boxTeamPage">
-			<div class="boxTitle<?php echo T_HTMLBOX_INFO;?>"><?php echo $lng->getTrn('profile/team/box_info/title');?></div>
-			<div class="boxBody">
-				<table width="100%">
-					<tr>
-						<td><?php echo $lng->getTrn('common/coach');?></td>
-						<td><a href="<?php echo urlcompile(T_URL_PROFILE,T_OBJ_COACH,$team->owned_by_coach_id,false,false);?>"><?php echo $team->f_cname; ?></a></td>
-					</tr>
-					<tr>
-						<td><?php echo $lng->getTrn('common/race');?></td>
-						<td><a href="<?php echo urlcompile(T_URL_PROFILE,T_OBJ_RACE,$team->f_race_id,false,false);?>"><?php echo $lng->getTrn('race/'.strtolower(str_replace(' ','', $team->f_rname))); ?></a></td>
-					</tr>
-					<tr>
-						<td><?php echo $lng->getTrn('common/league');?></td>
-						<td><?php if (isset($leagues[$team->f_lid])) {
+<!-- Following HTML is from class_team_htmlout.php _actionBoxes -->
+<a name="aanc"></a>
+<div class="boxTeamPage">
+	<div class="boxTitle<?php echo T_HTMLBOX_INFO;?>"><?php echo $lng->getTrn('profile/team/box_info/title');?></div>
+	<div class="boxBody">
+		<table width="100%">
+			<tr>
+				<td><?php echo $lng->getTrn('common/coach');?></td>
+				<td><a href="<?php echo urlcompile(T_URL_PROFILE,T_OBJ_COACH,$team->owned_by_coach_id,false,false);?>"><?php echo $team->f_cname; ?></a></td>
+			</tr>
+			<tr>
+				<td><?php echo $lng->getTrn('common/race');?></td>
+				<td><a href="<?php echo urlcompile(T_URL_PROFILE,T_OBJ_RACE,$team->f_race_id,false,false);?>"><?php echo $lng->getTrn('race/'.strtolower(str_replace(' ','', $team->f_rname))); ?></a></td>
+			</tr>
+			<tr>
+				<td><?php echo $lng->getTrn('common/league');?></td>
+				<td><?php if (isset($leagues[$team->f_lid])) {
 							echo "<a href=\"";
 							echo urlcompile(T_URL_STANDINGS,T_OBJ_TEAM,false,T_NODE_LEAGUE,$team->f_lid);
 							echo "\">" . $leagues[$team->f_lid]['lname'] . "</a>";
 						} else {
 							echo '<i>'.$lng->getTrn('common/none').'</i>';
 						} ?></td>
-					</tr>
-					<?php
+			</tr>
+			<?php
 					if ($team->f_did != self::T_NO_DIVISION_TIE) {
 						?>
-						<tr>
-							<td><?php echo $lng->getTrn('common/division');?></td>
-							<td><?php if (isset($divisions[$team->f_did])) {
+			<tr>
+				<td><?php echo $lng->getTrn('common/division');?></td>
+				<td><?php if (isset($divisions[$team->f_did])) {
 							echo "<a href=\"";
 							echo urlcompile(T_URL_STANDINGS,T_OBJ_TEAM,false,T_NODE_DIVISION,$team->f_did);
 							echo "\">" . $divisions[$team->f_did]['dname'] . "</a>";
 						} else {
 							echo '<i>'.$lng->getTrn('common/none').'</i>';
 						} ?></td>
-						</tr>
-						<?php
+			</tr>
+			<?php
 					}
 					?>
-					<tr>
-						<td><?php echo $lng->getTrn('common/ready');?></td>
-						<td><?php echo ($team->rdy) ? $lng->getTrn('common/yes') : $lng->getTrn('common/no'); ?></td>
-					</tr>
-					<tr>
-						<td>TV</td>
-						<td><?php echo $team->tv/1000 . 'k'; ?></td>
-					</tr>
-					<tr>
-						 <td><?php echo $lng->getTrn('matches/report/treas')?></td>
-						<td><?php echo $team->treasury/1000 . 'k'; ?></td>
-					</tr>
-					<tr>
-					<?php
+			<tr>
+				<td><?php echo $lng->getTrn('common/ready');?></td>
+				<td><?php echo ($team->rdy) ? $lng->getTrn('common/yes') : $lng->getTrn('common/no'); ?></td>
+			</tr>
+			<tr>
+				<td>TV</td>
+				<td><?php echo $team->tv/1000 . 'k'; ?></td>
+			</tr>
+			<tr>
+				<td><?php echo $lng->getTrn('matches/report/treas')?></td>
+				<td><?php echo $team->treasury/1000 . 'k'; ?></td>
+			</tr>
+			<tr>
+				<?php
 					if (in_array($team->f_race_id, $racesHasNecromancer)) {
 						?>
-						<td>Necromancer</td>
-						<td><?php echo $lng->getTrn('common/yes');?></td>
-						<?php
+				<td>Necromancer</td>
+				<td><?php echo $lng->getTrn('common/yes');?></td>
+				<?php
 					}
 					if (!in_array($team->f_race_id, $racesNoApothecary)) {
 						echo "<td>".$lng->getTrn('common/apothecary')."</td>\n";
 						echo "<td>" . ($team->apothecary ? $lng->getTrn('common/yes') : $lng->getTrn('common/no')) . "</td>\n";
 					}
 					?>
-					</tr>
-					<tr>
-						<td><?php echo $lng->getTrn('common/reroll')?></td>
-						<td><?php echo $team->rerolls; ?></td>
-					</tr>
-					<tr>
-						<td><?php echo $lng->getTrn('matches/report/ff')?></td>
-						<td><?php echo $team->rg_ff; ?></td>
-					</tr>
-					<tr>
-						<td><?php echo $lng->getTrn('common/ass_coach')?></td>
-						<td><?php echo $team->ass_coaches; ?></td>
-					</tr>
-					<tr>
-						<td><?php echo $lng->getTrn('common/cheerleader')?></td>
-						<td><?php echo $team->cheerleaders; ?></td>
-					</tr>
-					<tr>
-						<td colspan=2><hr></td>
-					</tr>
-					<tr>
-						<td><?php echo $lng->getTrn('common/played');?></td>
-						<td><?php echo $team->mv_played; ?></td>
-					</tr>
-					<tr>
-						<td>WIN%</td>
-						<td><?php echo sprintf("%1.1f", $team->rg_win_pct).'%'; ?></td>
-					</tr>
-					<tr>
-						<td>ELO</td>
-						<td><?php echo (($team->rg_elo) ? sprintf("%1.2f", $team->rg_elo) : '<i>N/A</i>'); ?></td>
-					</tr>
-					<tr>
-						<td>W/L/D</td>
-						<td><?php echo "$team->mv_won/$team->mv_lost/$team->mv_draw"; ?></td>
-					</tr>
-					<tr>
-						<td>W/L/D <?php echo $lng->getTrn('common/streaks');?></td>
-						<td><?php echo "$team->rg_swon/$team->rg_slost/$team->rg_sdraw"; ?></td>
-					</tr>
-					<tr>
-						<td><?php echo $lng->getTrn('common/wontours');?></td>
-						<td><?php echo $team->wt_cnt; ?></td>
-					</tr>
-					<tr>
-						<td><?php echo $lng->getTrn('profile/team/box_info/ltour');?></td>
-						<td><?php echo Tour::getTourUrl($team->getLatestTour()); ?></td>
-					</tr>
-					<tr valign="top">
-						<td><?php echo $lng->getTrn('common/playedtours');?></td>
-						<td><small><?php $tours = $team->getToursPlayedIn(false);
+			</tr>
+			<tr>
+				<td><?php echo $lng->getTrn('common/reroll')?></td>
+				<td><?php echo $team->rerolls; ?></td>
+			</tr>
+			<tr>
+				<td><?php echo $lng->getTrn('matches/report/ff')?></td>
+				<td><?php echo $team->rg_ff; ?></td>
+			</tr>
+			<tr>
+				<td><?php echo $lng->getTrn('common/ass_coach')?></td>
+				<td><?php echo $team->ass_coaches; ?></td>
+			</tr>
+			<tr>
+				<td><?php echo $lng->getTrn('common/cheerleader')?></td>
+				<td><?php echo $team->cheerleaders; ?></td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<hr>
+				</td>
+			</tr>
+			<tr>
+				<td><?php echo $lng->getTrn('common/played');?></td>
+				<td><?php echo $team->mv_played; ?></td>
+			</tr>
+			<tr>
+				<td>WIN%</td>
+				<td><?php echo sprintf("%1.1f", $team->rg_win_pct).'%'; ?></td>
+			</tr>
+			<tr>
+				<td>ELO</td>
+				<td><?php echo (($team->rg_elo) ? sprintf("%1.2f", $team->rg_elo) : '<i>N/A</i>'); ?></td>
+			</tr>
+			<tr>
+				<td>W/L/D</td>
+				<td><?php echo "$team->mv_won/$team->mv_lost/$team->mv_draw"; ?></td>
+			</tr>
+			<tr>
+				<td>W/L/D <?php echo $lng->getTrn('common/streaks');?></td>
+				<td><?php echo "$team->rg_swon/$team->rg_slost/$team->rg_sdraw"; ?></td>
+			</tr>
+			<tr>
+				<td><?php echo $lng->getTrn('common/wontours');?></td>
+				<td><?php echo $team->wt_cnt; ?></td>
+			</tr>
+			<tr>
+				<td><?php echo $lng->getTrn('profile/team/box_info/ltour');?></td>
+				<td><?php echo Tour::getTourUrl($team->getLatestTour()); ?></td>
+			</tr>
+			<tr valign="top">
+				<td><?php echo $lng->getTrn('common/playedtours');?></td>
+				<td><small><?php $tours = $team->getToursPlayedIn(false);
 						if (empty($tours)) {
 							echo $lng->getTrn('common/none');
 						} else {
@@ -904,39 +1168,39 @@ class Team_HTMLOUT extends Team
 								echo $tour->getUrl();
 							}
 						} ?></small></td>
-					</tr>
-					<?php
+			</tr>
+			<?php
 					if (Module::isRegistered('Prize')) {
 						?>
-						<tr valign="top">
-							<td><?php echo $lng->getTrn('name', 'Prize');?></td>
-							<td><small><?php echo Module::run('Prize', array('getPrizesString', T_OBJ_TEAM, $team->team_id));?></small></td>
-						</tr>
-						<?php
+			<tr valign="top">
+				<td><?php echo $lng->getTrn('name', 'Prize');?></td>
+				<td><small><?php echo Module::run('Prize', array('getPrizesString', T_OBJ_TEAM, $team->team_id));?></small></td>
+			</tr>
+			<?php
 					}
 					if (Module::isRegistered('FamousTeams')) {
 						?>
-						<tr>
-							<td><?php echo $lng->getTrn('isfamous', 'FamousTeams');?></td>
-							<td><?php echo (Module::run('FamousTeams', array('isInFT', $team->team_id))) ? '<b><font color="green">Yes</font></b>' : 'No';?></td>
-						</tr>
-						<?php
+			<tr>
+				<td><?php echo $lng->getTrn('isfamous', 'FamousTeams');?></td>
+				<td><?php echo (Module::run('FamousTeams', array('isInFT', $team->team_id))) ? '<b><font color="green">Yes</font></b>' : 'No';?></td>
+			</tr>
+			<?php
 					}
 					?>
-				</table>
-			</div>
-		</div>
+		</table>
+	</div>
+</div>
 
-		<?php
+<?php
 		if ($ALLOW_EDIT) {
 			$this->_teamManagementBox($players, $team);
 			if ($coach->isNodeCommish(T_NODE_LEAGUE, $team->f_lid)) {
 				?>
-				<!-- Following HTML is from class_team_htmlout.php _actionBoxes -->
-				<div class="boxTeamPage">
-					<div class="boxTitle<?php echo T_HTMLBOX_ADMIN;?>"><?php echo $lng->getTrn('profile/team/box_admin/title');?></div>
-					<div class="boxBody">
-						<?php
+<!-- Following HTML is from class_team_htmlout.php _actionBoxes -->
+<div class="boxTeamPage">
+	<div class="boxTitle<?php echo T_HTMLBOX_ADMIN;?>"><?php echo $lng->getTrn('profile/team/box_admin/title');?></div>
+	<div class="boxBody">
+		<?php
 						$base = 'profile/team';
 						$admin_tools = array(
 							'unhire_journeyman' => $lng->getTrn($base.'/box_admin/unhire_journeyman'),
@@ -949,6 +1213,7 @@ class Team_HTMLOUT extends Team
 							'ach_skills'        => $lng->getTrn($base.'/box_admin/ach_skills'),
 							'ff'                => $lng->getTrn($base.'/box_admin/ff'),
 							'removeNiggle'      => $lng->getTrn($base.'/box_admin/removeNiggle'),
+							'dff'               => $lng->getTrn($base.'/box_admin/dff'),
 						);
 						// Set default choice.
 						if (!isset($_POST['menu_admintools'])) {
@@ -960,19 +1225,19 @@ class Team_HTMLOUT extends Team
 							$_POST['menu_admintools'] = $_POST['type'];
 						}
 						?>
-						<form method="POST" name="menu_admintools_form">
-							<select name="menu_admintools" onchange="document.menu_admintools_form.submit();">
-								<?php
+		<form method="POST" name="menu_admintools_form">
+			<select name="menu_admintools" onchange="document.menu_admintools_form.submit();">
+				<?php
 								foreach ($admin_tools as $opt => $desc)
 									echo "<option value='$opt'" . ($_POST['menu_admintools'] == $opt ? 'SELECTED' : '') . ">$desc</option>";
 								?>
-							</select>
-							<!-- <input type="submit" name="admintools" value="OK"> -->
-						</form>
+			</select>
+			<!-- <input type="submit" name="admintools" value="OK"> -->
+		</form>
 
-						<br><i><?php echo $lng->getTrn('common/desc');?>:</i><br><br>
-						<form name='form_admintools' method='POST'>
-							<?php
+		<br><i><?php echo $lng->getTrn('common/desc');?>:</i><br><br>
+		<form name='form_admintools' method='POST'>
+			<?php
 							$DISABLE = false;
 							switch ($_POST['menu_admintools']) {
 								/***************
@@ -981,10 +1246,10 @@ class Team_HTMLOUT extends Team
 								case 'unhire_journeyman':
 									echo $lng->getTrn('profile/team/box_admin/desc/unhire_journeyman');
 									?>
-									<hr><br>
-									<?php echo $lng->getTrn('common/player');?>:<br>
-									<select name="player">
-									<?php
+			<hr><br>
+			<?php echo $lng->getTrn('common/player');?>:<br>
+			<select name="player">
+				<?php
 									$DISABLE = true;
 									foreach ($players as $p) {
 										if ($p->is_sold || $p->is_dead || $p->is_journeyman || $p->qty != 16)
@@ -994,9 +1259,9 @@ class Team_HTMLOUT extends Team
 										$DISABLE = false;
 									}
 									?>
-									</select>
-									<input type="hidden" name="type" value="unhire_journeyman">
-									<?php
+			</select>
+			<input type="hidden" name="type" value="unhire_journeyman">
+			<?php
 									break;
 								/***************
 								 * Un-sell player
@@ -1004,10 +1269,10 @@ class Team_HTMLOUT extends Team
 								case 'unsell_player':
 									echo $lng->getTrn('profile/team/box_admin/desc/unsell_player');
 									?>
-									<hr><br>
-									<?php echo $lng->getTrn('common/player');?>:<br>
-									<select name="player">
-									<?php
+			<hr><br>
+			<?php echo $lng->getTrn('common/player');?>:<br>
+			<select name="player">
+				<?php
 									$DISABLE = true;
 									foreach ($players as $p) {
 										if ($p->is_sold) {
@@ -1016,9 +1281,9 @@ class Team_HTMLOUT extends Team
 										}
 									}
 									?>
-									</select>
-									<input type="hidden" name="type" value="unsell_player">
-									<?php
+			</select>
+			<input type="hidden" name="type" value="unsell_player">
+			<?php
 									break;
 								/***************
 								 * Un-buy team goods
@@ -1026,9 +1291,9 @@ class Team_HTMLOUT extends Team
 								case 'unbuy_goods':
 									echo $lng->getTrn('profile/team/box_admin/desc/unbuy_goods');
 									?>
-									<hr><br>
-									<select name="thing">
-									<?php
+			<hr><br>
+			<select name="thing">
+				<?php
 									$DISABLE = true;
 										foreach ($team->getGoods() as $name => $details) {
 										if ($team->$name > 0) { # Only allow to un-buy those things which we already have some of.
@@ -1037,9 +1302,9 @@ class Team_HTMLOUT extends Team
 										}
 									}
 									?>
-									</select>
-									<input type="hidden" name="type" value="unbuy_goods">
-									<?php
+			</select>
+			<input type="hidden" name="type" value="unbuy_goods">
+			<?php
 									break;
 								/***************
 								 * Gold bank
@@ -1047,25 +1312,25 @@ class Team_HTMLOUT extends Team
 								case 'bank':
 									echo $lng->getTrn('profile/team/box_admin/desc/bank');
 									?>
-									<hr><br>
-									&Delta; team treasury:<br>
-									<input type="radio" CHECKED name="sign" value="+">+
-									<input type="radio" name="sign" value="-">-
-									<input type='text' name="amount" maxlength=5 size=5>k
-									<input type="hidden" name="type" value="bank">
-									<?php
-									break;
+			<hr><br>
+			&Delta; team treasury:<br>
+			<input type="radio" CHECKED name="sign" value="+">+
+			<input type="radio" name="sign" value="-">-
+			<input type='text' name="amount" maxlength=5 size=5>k
+			<input type="hidden" name="type" value="bank">
+			<?php
+									break;                                 
 								/***************
 								 * Manage Fan Factor
 								***************/
 								case 'ff':
 									echo $lng->getTrn('profile/team/box_admin/desc/ff');
 									?>
-									<hr><br>
-									Bought ff + Match ff = Total<br>
-									<input type='text' name="amount" value="<?php echo $team->ff_bought.'" maxlength=2 size=1 style="text-align: right">+'.($team->rg_ff-$team->ff_bought).'='.$team->rg_ff ?>
-									<input type="hidden" name="type" value="ff">
-									<?php
+			<hr><br>
+			Bought ff + Match ff = Total<br>
+			<input type='text' name="amount" value="<?php echo $team->ff_bought.'" maxlength=2 size=1 style="text-align: right">+'.($team->rg_ff-$team->ff_bought).'='.$team->rg_ff ?>
+									<input type=" hidden" name="type" value="ff">
+			<?php
 									break;
 								/***************
 								 * Manage extra SPP
@@ -1073,10 +1338,10 @@ class Team_HTMLOUT extends Team
 								case 'spp':
 									echo $lng->getTrn('profile/team/box_admin/desc/spp');
 									?>
-									<hr><br>
-									<?php echo $lng->getTrn('common/player');?>:<br>
-									<select name="player">
-									<?php
+			<hr><br>
+			<?php echo $lng->getTrn('common/player');?>:<br>
+			<select name="player">
+				<?php
 									$DISABLE = true;
 									objsort($players, array('+is_dead', '+name'));
 									foreach ($players as $p) {
@@ -1087,13 +1352,13 @@ class Team_HTMLOUT extends Team
 									}
 									objsort($players, array('+nr'));
 									?>
-									</select>
-									<br><br>
-									<input type="radio" CHECKED name="sign" value="+">+
-									<input type="radio" name="sign" value="-">-
-									<input type='text' name='amount' maxlength="5" size="5"> &Delta; SPP
-									<input type="hidden" name="type" value="spp">
-									<?php
+			</select>
+			<br><br>
+			<input type="radio" CHECKED name="sign" value="+">+
+			<input type="radio" name="sign" value="-">-
+			<input type='text' name='amount' maxlength="5" size="5"> &Delta; SPP
+			<input type="hidden" name="type" value="spp">
+			<?php
 									break;
 								/***************
 								 * Manage extra player value
@@ -1101,10 +1366,10 @@ class Team_HTMLOUT extends Team
 								case 'dval':
 									echo $lng->getTrn('profile/team/box_admin/desc/dval');
 									?>
-									<hr><br>
-									<?php echo $lng->getTrn('common/player');?>:<br>
-									<select name="player">
-									<?php
+			<hr><br>
+			<?php echo $lng->getTrn('common/player');?>:<br>
+			<select name="player">
+				<?php
 									$DISABLE = true;
 									objsort($players, array('+is_dead', '+name'));
 									foreach ($players as $p) {
@@ -1115,14 +1380,14 @@ class Team_HTMLOUT extends Team
 									}
 									objsort($players, array('+nr'));
 									?>
-									</select>
-									<br><br>
-									Set extra value to<br>
-									<input type="radio" CHECKED name="sign" value="+">+
-									<input type="radio" name="sign" value="-">-
-									<input type='text' name='amount' maxlength="10" size="6">k
-									<input type="hidden" name="type" value="dval">
-									<?php
+			</select>
+			<br><br>
+			Set extra value to<br>
+			<input type="radio" CHECKED name="sign" value="+">+
+			<input type="radio" name="sign" value="-">-
+			<input type='text' name='amount' maxlength="10" size="6">k
+			<input type="hidden" name="type" value="dval">
+			<?php
 									break;
 								/***************
 								 * Manage extra skills
@@ -1130,10 +1395,10 @@ class Team_HTMLOUT extends Team
 								case 'extra_skills':
 									echo $lng->getTrn('profile/team/box_admin/desc/extra_skills');
 									?>
-									<hr><br>
-									<?php echo $lng->getTrn('common/player');?>:<br>
-									<select name="player">
-									<?php
+			<hr><br>
+			<?php echo $lng->getTrn('common/player');?>:<br>
+			<select name="player">
+				<?php
 									$DISABLE = true;
 									foreach ($players as $p) {
 										if (!$p->is_sold && !$p->is_dead) {
@@ -1142,11 +1407,11 @@ class Team_HTMLOUT extends Team
 										}
 									}
 									?>
-									</select>
-									<br><br>
-									Skill:<br>
-									<select name="skill">
-									<?php
+			</select>
+			<br><br>
+			Skill:<br>
+			<select name="skill">
+				<?php
 									foreach ($skillarray as $cat => $skills) {
 										echo "<OPTGROUP LABEL='$cat'>";
 										foreach ($skills as $id => $skill) {
@@ -1155,13 +1420,13 @@ class Team_HTMLOUT extends Team
 										echo "</OPTGROUP>";
 									}
 									?>
-									</select>
-									<br><br>
-									Action (add/remove)<br>
-									<input type="radio" CHECKED name="sign" value="+">+
-									<input type="radio" name="sign" value="-">-
-									<input type="hidden" name="type" value="extra_skills">
-									<?php
+			</select>
+			<br><br>
+			Action (add/remove)<br>
+			<input type="radio" CHECKED name="sign" value="+">+
+			<input type="radio" name="sign" value="-">-
+			<input type="hidden" name="type" value="extra_skills">
+			<?php
 									break;
 								/***************
 								 * Remove achived skills
@@ -1169,10 +1434,10 @@ class Team_HTMLOUT extends Team
 								case 'ach_skills':
 									echo $lng->getTrn('profile/team/box_admin/desc/ach_skills');
 									?>
-									<hr><br>
-									<?php echo $lng->getTrn('common/player');?>:<br>
-									<select name="player">
-									<?php
+			<hr><br>
+			<?php echo $lng->getTrn('common/player');?>:<br>
+			<select name="player">
+				<?php
 									$DISABLE = true;
 									foreach ($players as $p) {
 										if (!$p->is_dead && !$p->is_sold) {
@@ -1181,11 +1446,11 @@ class Team_HTMLOUT extends Team
 										}
 									}
 									?>
-									</select>
-									<br><br>
-									Skill<br>
-									<select name="skill">
-									<?php
+			</select>
+			<br><br>
+			Skill<br>
+			<select name="skill">
+				<?php
 									foreach ($skillarray as $cat => $skills) {
 										echo "<OPTGROUP LABEL='$cat'>";
 										foreach ($skills as $id => $skill) {
@@ -1199,9 +1464,9 @@ class Team_HTMLOUT extends Team
 									}
 									echo "</optgroup>\n";
 									?>
-									</select>
-									<input type="hidden" name="type" value="ach_skills">
-									<?php
+			</select>
+			<input type="hidden" name="type" value="ach_skills">
+			<?php
 									break;
 								/***************
 								 * Remove niggling injuries
@@ -1209,10 +1474,10 @@ class Team_HTMLOUT extends Team
 								case 'removeNiggle':
 									echo $lng->getTrn('profile/team/box_admin/desc/removeNiggle');
 									?>
-									<hr><br>
-									<?php echo $lng->getTrn('common/player');?>:<br>
-									<select name="player">
-									<?php
+			<hr><br>
+			<?php echo $lng->getTrn('common/player');?>:<br>
+			<select name="player">
+				<?php
 									$DISABLE = true;
 									foreach ($players as $p) {
 										if ($p->is_sold || $p->is_dead || $p->is_journeyman || $p->inj_ni == 0)
@@ -1222,57 +1487,72 @@ class Team_HTMLOUT extends Team
 										$DISABLE = false;
 									}
 									?>
-									</select>
-									<input type="hidden" name="type" value="removeNiggle">
-									<?php
+			</select>
+			<input type="hidden" name="type" value="removeNiggle">
+			<?php
+									break;
+                                    
+                                 /***************
+								 * Adjust FF for Redraft
+								 **************/
+								case 'dff':
+									echo $lng->getTrn('profile/team/box_admin/desc/dff');
+									?>
+			<hr><br>
+			&Delta; team ff:<br>
+			<input type="radio" CHECKED name="sign" value="+">+
+			<input type="radio" name="sign" value="-">-
+			<input type='text' name="amount" maxlength=1 size=1>FF
+			<input type="hidden" name="type" value="dff">
+			<?php
 									break;
 							}
 							?>
-							<br><br>
-							<input type="submit" name="button" value="OK" <?php echo ($DISABLE ? 'DISABLED' : '');?> >
-						</form>
-					</div>
-				</div>
-				<?php
+			<br><br>
+			<input type="submit" name="button" value="OK" <?php echo ($DISABLE ? 'DISABLED' : '');?>>
+		</form>
+	</div>
+</div>
+<?php
 			}
 		}
 		?>
-		<br>
-		<div class="row"></div>
-		<br>
-		<?php
+<br>
+<div class="row"></div>
+<br>
+<?php
 		if (!$settings['hide_ES_extensions']){
 			?>
-			<div class="row">
-				<div class="boxWide">
-					<div class="boxTitle<?php echo T_HTMLBOX_STATS;?>"><a href='javascript:void(0);' onClick="slideToggleFast('ES');"><b>[+/-]</b></a> &nbsp;<?php echo $lng->getTrn('common/extrastats'); ?></div>
-					<div class="boxBody" id="ES" style='display:none;'>
-						<?php
+<div class="row">
+	<div class="boxWide">
+		<div class="boxTitle<?php echo T_HTMLBOX_STATS;?>"><a href='javascript:void(0);' onClick="slideToggleFast('ES');"><b>[+/-]</b></a> &nbsp;<?php echo $lng->getTrn('common/extrastats'); ?></div>
+		<div class="boxBody" id="ES" style='display:none;'>
+			<?php
 						HTMLOUT::generateEStable($this);
 						?>
-					</div>
-				</div>
-			</div>
-			<?php
+		</div>
+	</div>
+</div>
+<?php
 		}
 		// If an team action was chosen, jump to actions HTML anchor.
 		if ($JMP_ANC) {
 			?>
-			<script language="JavaScript" type="text/javascript">
-			window.location = "#aanc";
-			</script>
-			<?php
+<script language="JavaScript" type="text/javascript">
+	window.location = "#aanc";
+</script>
+<?php
 		}
 	}
 
 	private function _teamManagementBox($players, $team) {
 		global $lng, $rules, $DEA, $T_ALLOWED_PLAYER_NR;
 		?>
-		<!-- Following HTML is from class_team_htmlout.php _teamManagementBox -->
-		<div class="boxTeamPage">
-		<div class="boxTitle<?php echo T_HTMLBOX_COACH;?>"><?php echo $lng->getTrn('profile/team/box_tm/title') . ' - ' . $team->name;?></div>
-		<div class="boxBody">
-			<?php
+<!-- Following HTML is from class_team_htmlout.php _teamManagementBox -->
+<div class="boxTeamPage">
+	<div class="boxTitle<?php echo T_HTMLBOX_COACH;?>"><?php echo $lng->getTrn('profile/team/box_tm/title') . ' - ' . $team->name;?></div>
+	<div class="boxBody">
+		<?php
 			$base = 'profile/team';
 			$tmanage = array(
 				'hire_player'       => $lng->getTrn($base.'/box_tm/hire_player'),
@@ -1301,17 +1581,17 @@ class Team_HTMLOUT extends Team
 				$_POST['menu_tmanage'] = $_POST['type'];
 			}
 			?>
-			<form method="POST" name="menu_tmanage_form">
-				<select name="menu_tmanage" onchange="document.menu_tmanage_form.submit();">
-					<?php
+		<form method="POST" name="menu_tmanage_form">
+			<select name="menu_tmanage" onchange="document.menu_tmanage_form.submit();">
+				<?php
 					foreach ($tmanage as $opt => $desc)
 						echo "<option value='$opt'" . ($_POST['menu_tmanage'] == $opt ? 'SELECTED' : '') . ">$desc</option>";
 					?>
-				</select>
-				<!-- <input type="submit" name="tmanage" value="OK"> -->
-			</form>
-			<br><i><?php echo $lng->getTrn('common/desc');?>:</i><br><br>
-			<form name="form_tmanage" method="POST" enctype="multipart/form-data">
+			</select>
+			<!-- <input type="submit" name="tmanage" value="OK"> -->
+		</form>
+		<br><i><?php echo $lng->getTrn('common/desc');?>:</i><br><br>
+		<form name="form_tmanage" method="POST" enctype="multipart/form-data">
 			<?php
 			$DISABLE = false;
 			switch ($_POST['menu_tmanage']) {
@@ -1321,10 +1601,10 @@ class Team_HTMLOUT extends Team
 				case 'hire_player':
 					echo $lng->getTrn('profile/team/box_tm/desc/hire_player');
 					?>
-					<hr><br>
-					<?php echo $lng->getTrn('common/player');?>:<br>
-					<select name='player'>
-					<?php
+			<hr><br>
+			<?php echo $lng->getTrn('common/player');?>:<br>
+			<select name='player'>
+				<?php
 					$active_players = array_filter($players, create_function('$p', "return (\$p->is_sold || \$p->is_dead || \$p->is_mng) ? false : true;"));
 					$DISABLE = true;
 					foreach ($DEA[$team->f_rname]['players'] as $pos => $details) {
@@ -1337,9 +1617,9 @@ class Team_HTMLOUT extends Team
 					}
 					echo "</select>\n";
 					?>
-					<br><br>
-					<?php echo $lng->getTrn('common/number');?>:<br>
-					<select name="number">
+				<br><br>
+				<?php echo $lng->getTrn('common/number');?>:<br>
+				<select name="number">
 					<?php
 					foreach ($T_ALLOWED_PLAYER_NR as $i) {
 						foreach ($players as $p) {
@@ -1349,14 +1629,14 @@ class Team_HTMLOUT extends Team
 						echo "<option value='$i'>$i</option>\n";
 					}
 					?>
-					</select>
-					<br><br>
-					<?php echo $lng->GetTrn('common/journeyman')?> ? <input type="checkbox" name="as_journeyman" value="1">
-					<br><br>
-					<?php echo $lng->getTrn('common/name');?>:<br>
-					<input type="text" name="name">
-					<input type="hidden" name="type" value="hire_player">
-					<?php
+				</select>
+				<br><br>
+				<?php echo $lng->GetTrn('common/journeyman')?> ? <input type="checkbox" name="as_journeyman" value="1">
+				<br><br>
+				<?php echo $lng->getTrn('common/name');?>:<br>
+				<input type="text" name="name">
+				<input type="hidden" name="type" value="hire_player">
+				<?php
 					break;
 				/**************
 				 * Hire journeymen
@@ -1364,9 +1644,9 @@ class Team_HTMLOUT extends Team
 				case 'hire_journeyman':
 					echo $lng->getTrn('profile/team/box_tm/desc/hire_journeyman');
 					?>
-					<hr><br>
-					<?php echo $lng->getTrn('common/player');?>:<br>
-					<select name="player">
+				<hr><br>
+				<?php echo $lng->getTrn('common/player');?>:<br>
+				<select name="player">
 					<?php
 					$DISABLE = true;
 					foreach ($players as $p) {
@@ -1380,9 +1660,9 @@ class Team_HTMLOUT extends Team
 						$DISABLE = false;
 					}
 					?>
-					</select>
-					<input type="hidden" name="type" value="hire_journeyman">
-					<?php
+				</select>
+				<input type="hidden" name="type" value="hire_journeyman">
+				<?php
 					break;
 				/**************
 				 * Fire player
@@ -1390,9 +1670,9 @@ class Team_HTMLOUT extends Team
 				case 'fire_player':
 					echo $lng->getTrn('profile/team/box_tm/desc/fire_player').' '.$rules['player_refund']*100 . "%.\n";
 					?>
-					<hr><br>
-					<?php echo $lng->getTrn('common/player');?>:<br>
-					<select name="player">
+				<hr><br>
+				<?php echo $lng->getTrn('common/player');?>:<br>
+				<select name="player">
 					<?php
 					$DISABLE = true;
 					foreach ($players as $p) {
@@ -1403,9 +1683,9 @@ class Team_HTMLOUT extends Team
 						$DISABLE = false;
 					}
 					?>
-					</select>
-					<input type="hidden" name="type" value="fire_player">
-					<?php
+				</select>
+				<input type="hidden" name="type" value="fire_player">
+				<?php
 					break;
 				/***************
 				 * Un-buy player
@@ -1413,9 +1693,9 @@ class Team_HTMLOUT extends Team
 				case 'unbuy_player':
 					echo $lng->getTrn('profile/team/box_tm/desc/unbuy_player');
 					?>
-					<hr><br>
-					<?php echo $lng->getTrn('common/player');?>:<br>
-					<select name="player">
+				<hr><br>
+				<?php echo $lng->getTrn('common/player');?>:<br>
+				<select name="player">
 					<?php
 					$DISABLE = true;
 					foreach ($players as $p) {
@@ -1425,9 +1705,9 @@ class Team_HTMLOUT extends Team
 						}
 					}
 					?>
-					</select>
-					<input type="hidden" name="type" value="unbuy_player">
-					<?php
+				</select>
+				<input type="hidden" name="type" value="unbuy_player">
+				<?php
 					break;
 				/**************
 				 * Rename player
@@ -1435,9 +1715,9 @@ class Team_HTMLOUT extends Team
 				case 'rename_player':
 					echo $lng->getTrn('profile/team/box_tm/desc/rename_player');
 					?>
-					<hr><br>
-					<?php echo $lng->getTrn('common/player');?>:<br>
-					<select name="player">
+				<hr><br>
+				<?php echo $lng->getTrn('common/player');?>:<br>
+				<select name="player">
 					<?php
 					$DISABLE = true;
 					foreach ($players as $p) {
@@ -1451,12 +1731,12 @@ class Team_HTMLOUT extends Team
 						$DISABLE = false;
 					}
 					?>
-					</select>
-					<br><br>
-					<?php echo $lng->getTrn('common/name');?>:<br>
-					<input type='text' name='name' maxlength=50 size=20>
-					<input type="hidden" name="type" value="rename_player">
-					<?php
+				</select>
+				<br><br>
+				<?php echo $lng->getTrn('common/name');?>:<br>
+				<input type='text' name='name' maxlength=50 size=20>
+				<input type="hidden" name="type" value="rename_player">
+				<?php
 					break;
 				/**************
 				 * Renumber player
@@ -1464,9 +1744,9 @@ class Team_HTMLOUT extends Team
 				case 'renumber_player':
 					echo $lng->getTrn('profile/team/box_tm/desc/renumber_player');
 					?>
-					<hr><br>
-					<?php echo $lng->getTrn('common/player');?>:<br>
-					<select name="player">
+				<hr><br>
+				<?php echo $lng->getTrn('common/player');?>:<br>
+				<select name="player">
 					<?php
 					$DISABLE = true;
 					foreach ($players as $p) {
@@ -1480,18 +1760,18 @@ class Team_HTMLOUT extends Team
 						$DISABLE = false;
 					}
 					?>
-					</select>
-					<br><br>
-					<?php echo $lng->getTrn('common/number');?>:<br>
-					<select name="number">
+				</select>
+				<br><br>
+				<?php echo $lng->getTrn('common/number');?>:<br>
+				<select name="number">
 					<?php
 					foreach ($T_ALLOWED_PLAYER_NR as $i) {
 						echo "<option value='$i'>$i</option>\n";
 					}
 					?>
-					</select>
-					<input type="hidden" name="type" value="renumber_player">
-					<?php
+				</select>
+				<input type="hidden" name="type" value="renumber_player">
+				<?php
 					break;
 				/**************
 				 * Rename team
@@ -1499,11 +1779,11 @@ class Team_HTMLOUT extends Team
 				case 'rename_team':
 					echo $lng->getTrn('profile/team/box_tm/desc/rename_team');
 					?>
-					<hr><br>
-					<?php echo $lng->getTrn('common/name');?>:<br>
-					<input type='text' name='name' maxlength='50' size='20'>
-					<input type="hidden" name="type" value="rename_team">
-					<?php
+				<hr><br>
+				<?php echo $lng->getTrn('common/name');?>:<br>
+				<input type='text' name='name' maxlength='50' size='20'>
+				<input type="hidden" name="type" value="rename_team">
+				<?php
 					break;
 				/**************
 				 * Buy team goods
@@ -1515,9 +1795,9 @@ class Team_HTMLOUT extends Team
 						echo $lng->getTrn('profile/team/box_tm/desc/buy_goods_warn');
 					}
 					?>
-					<hr><br>
-					<?php echo $lng->getTrn('profile/team/box_tm/fdescs/thing');?>:<br>
-					<select name="thing">
+				<hr><br>
+				<?php echo $lng->getTrn('profile/team/box_tm/fdescs/thing');?>:<br>
+				<select name="thing">
 					<?php
 					$DISABLE = true;
 					foreach ($team->getGoods() as $name => $details) {
@@ -1529,9 +1809,9 @@ class Team_HTMLOUT extends Team
 						}
 					}
 					?>
-					</select>
-					<input type="hidden" name="type" value="buy_goods">
-					<?php
+				</select>
+				<input type="hidden" name="type" value="buy_goods">
+				<?php
 					break;
 				/**************
 				 * Let go (drop) of team goods
@@ -1539,9 +1819,9 @@ class Team_HTMLOUT extends Team
 				case 'drop_goods':
 					echo $lng->getTrn('profile/team/box_tm/desc/drop_goods');
 					?>
-					<hr><br>
-					<?php echo $lng->getTrn('profile/team/box_tm/fdescs/thing');?>:<br>
-					<select name="thing">
+				<hr><br>
+				<?php echo $lng->getTrn('profile/team/box_tm/fdescs/thing');?>:<br>
+				<select name="thing">
 					<?php
 					$DISABLE = true;
 					foreach ($team->getGoods() as $name => $details) {
@@ -1553,9 +1833,9 @@ class Team_HTMLOUT extends Team
 						}
 					}
 					?>
-					</select>
-					<input type="hidden" name="type" value="drop_goods">
-					<?php
+				</select>
+				<input type="hidden" name="type" value="drop_goods">
+				<?php
 					break;
 				/**************
 				 * Set ready state
@@ -1563,11 +1843,11 @@ class Team_HTMLOUT extends Team
 				case 'ready_state':
 					echo $lng->getTrn('profile/team/box_tm/desc/ready_state');
 					?>
-					<hr><br>
-					<?php echo $lng->getTrn('profile/team/box_tm/fdescs/teamready');?>
-					<input type="checkbox" name="bool" value="1" <?php echo ($team->rdy) ? 'CHECKED' : '';?>>
-					<input type="hidden" name="type" value="ready_state">
-					<?php
+				<hr><br>
+				<?php echo $lng->getTrn('profile/team/box_tm/fdescs/teamready');?>
+				<input type="checkbox" name="bool" value="1" <?php echo ($team->rdy) ? 'CHECKED' : '';?>>
+				<input type="hidden" name="type" value="ready_state">
+				<?php
 					break;
 				/***************
 				 * Retire
@@ -1575,11 +1855,11 @@ class Team_HTMLOUT extends Team
 				case 'retire':
 					echo $lng->getTrn('profile/team/box_tm/desc/retire');
 					?>
-					<hr><br>
-					<?php echo $lng->getTrn('profile/team/box_tm/fdescs/retire');?>
-					<input type="checkbox" name="bool" value="1">
-					<input type="hidden" name="type" value="retire">
-					<?php
+				<hr><br>
+				<?php echo $lng->getTrn('profile/team/box_tm/fdescs/retire');?>
+				<input type="checkbox" name="bool" value="1">
+				<input type="hidden" name="type" value="retire">
+				<?php
 					break;
 				/***************
 				 * Delete
@@ -1590,25 +1870,23 @@ class Team_HTMLOUT extends Team
 						$DISABLE = true;
 					}
 					?>
-					<hr><br>
-					<?php echo $lng->getTrn('profile/team/box_tm/fdescs/suredeleteteam');?>
-					<input type="checkbox" name="bool" value="1" <?php echo ($DISABLE) ? 'DISABLED' : '';?>>
-					<input type="hidden" name="type" value="delete">
-					<?php
+				<hr><br>
+				<?php echo $lng->getTrn('profile/team/box_tm/fdescs/suredeleteteam');?>
+				<input type="checkbox" name="bool" value="1" <?php echo ($DISABLE) ? 'DISABLED' : '';?>>
+				<input type="hidden" name="type" value="delete">
+				<?php
 					break;
 				}
 				?>
 				<br><br>
-				<input type="submit" name="button" value="OK" <?php echo ($DISABLE ? 'DISABLED' : '');?>
-					<?php if (in_array($_POST['menu_tmanage'], $tmange_confirm)) {echo "onClick=\"if(!confirm('".$lng->getTrn('common/confirm_box')."')){return false;}\"";}?>
-				>
+				<input type="submit" name="button" value="OK" <?php echo ($DISABLE ? 'DISABLED' : '');?> <?php if (in_array($_POST['menu_tmanage'], $tmange_confirm)) {echo "onClick=\"if(!confirm('".$lng->getTrn('common/confirm_box')."')){return false;}\"";}?>>
 				<?php if(Mobile::isMobile()) {
 					echo '<a href="' . getFormAction('') . '">' . $lng->getTrn('common/back') . '</a>';
 				} ?>
-			</form>
-		</div>
+		</form>
 	</div>
-	<?php
+</div>
+<?php
 	}
 
 	private function _about($ALLOW_EDIT) {
@@ -1616,26 +1894,26 @@ class Team_HTMLOUT extends Team
 		$team = $this; // Copy. Used instead of $this for readability.
 		title('<div class="team-management-title">' . $lng->getTrn('common/about') . '</div>');
 		?>
-		<!-- Following HTML is from class_team_htmlout.php _about -->
-		<table class='common'>
-			<tr class='commonhead'>
-				<td><b><?php echo $lng->getTrn('profile/team/logo');?></b></td>
-				<td><b><?php echo $lng->getTrn('profile/team/stad');?></b></td>
-				<td><b><?php echo $lng->getTrn('common/about');?></b></td>
-			</tr>
-			<tr>
-				<td>
-					<?php
+<!-- Following HTML is from class_team_htmlout.php _about -->
+<table class='common'>
+	<tr class='commonhead'>
+		<td><b><?php echo $lng->getTrn('profile/team/logo');?></b></td>
+		<td><b><?php echo $lng->getTrn('profile/team/stad');?></b></td>
+		<td><b><?php echo $lng->getTrn('common/about');?></b></td>
+	</tr>
+	<tr>
+		<td>
+			<?php
 					ImageSubSys::makeBox(IMGTYPE_TEAMLOGO, $team->team_id, $ALLOW_EDIT, '_logo');
 					?>
-				</td>
-				<td>
-					<?php
+		</td>
+		<td>
+			<?php
 					ImageSubSys::makeBox(IMGTYPE_TEAMSTADIUM, $team->team_id, $ALLOW_EDIT, '_stad');
 					?>
-				</td>
-				<td valign='top' style='width: 100%;'>
-					<?php
+		</td>
+		<td valign='top' style='width: 100%;'>
+			<?php
 					$txt = $team->getText();
 					if (empty($txt)) {
 						$txt = $lng->getTrn('common/nobody');
@@ -1643,24 +1921,24 @@ class Team_HTMLOUT extends Team
 
 					if ($ALLOW_EDIT) {
 						?>
-						<form method='POST'>
-							<textarea name='teamtext' rows='15' style='width: 100%;'><?php echo $txt;?></textarea>
-							<br><br>
-							<input type="hidden" name="type" value="teamtext">
-							<center>
-							<input type="submit" name='Save' value='<?php echo $lng->getTrn('common/save');?>'>
-							</center>
-						</form>
-						<?php
+			<form method='POST'>
+				<textarea name='teamtext' rows='15' style='width: 100%;'><?php echo $txt;?></textarea>
+				<br><br>
+				<input type="hidden" name="type" value="teamtext">
+				<center>
+					<input type="submit" name='Save' value='<?php echo $lng->getTrn('common/save');?>'>
+				</center>
+			</form>
+			<?php
 					}
 					else {
 						echo '<p>'.fmtprint($txt)."</p>\n";
 					}
 					?>
-				</td>
-			</tr>
-		</table>
-		<?php
+		</td>
+	</tr>
+</table>
+<?php
 	}
 
 	private function _news($ALLOW_EDIT) {
@@ -1669,12 +1947,12 @@ class Team_HTMLOUT extends Team
 		title('<div class="team-management-title">' . $lng->getTrn('profile/team/news') . '</div>');
 		$news = $team->getNews(MAX_TNEWS);
 		?>
-		<!-- Following HTML is from class_team_htmlout.php _news -->
-		<div class="row">
-			<div class="boxWide">
-				<div class="boxTitle<?php echo T_HTMLBOX_INFO;?>"><?php echo $lng->getTrn('profile/team/tnews');?></div>
-				<div class="boxBody">
-				<?php
+<!-- Following HTML is from class_team_htmlout.php _news -->
+<div class="row">
+	<div class="boxWide">
+		<div class="boxTitle<?php echo T_HTMLBOX_INFO;?>"><?php echo $lng->getTrn('profile/team/tnews');?></div>
+		<div class="boxBody">
+			<?php
 				$news_2 = array();
 				foreach ($news as $n) {
 					$news_2[] = '<p>'.fmtprint($n->txt).
@@ -1698,22 +1976,22 @@ class Team_HTMLOUT extends Team
 				}
 				if ($ALLOW_EDIT) {
 					?>
-					<hr>
-					<br>
-					<b><?php echo $lng->getTrn('profile/team/wnews');?></b>
-					<form method="POST">
-						<textarea name='txt' cols='60' rows='4'></textarea>
-						<br><br>
-						<input type="hidden" name="type" value="news">
-						<input type='submit' value="<?php echo $lng->getTrn('common/submit');?>">
-					</form>
-					<?php
+			<hr>
+			<br>
+			<b><?php echo $lng->getTrn('profile/team/wnews');?></b>
+			<form method="POST">
+				<textarea name='txt' cols='60' rows='4'></textarea>
+				<br><br>
+				<input type="hidden" name="type" value="news">
+				<input type='submit' value="<?php echo $lng->getTrn('common/submit');?>">
+			</form>
+			<?php
 				}
 				?>
-				</div>
-			</div>
 		</div>
-		<?php
+	</div>
+</div>
+<?php
 	}
 
 	private function _games() {

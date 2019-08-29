@@ -246,6 +246,19 @@ class Team
             return false;
         }
     }
+    
+     public function dffactor($delta) {
+    /*
+    * Add a delta to team's won Fan Factor. For Redraft Purposes
+    */
+        $query = "UPDATE mv_teams SET ff = GREATEST(ff + $delta, 0) WHERE f_tid = $this->team_id";
+        if (mysql_query($query)) {
+        $this->ff += $delta;
+        return true;
+        } else {
+        return false;
+        }
+    }
 
 	public function setff_bought($integer) {
         /**
