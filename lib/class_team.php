@@ -274,8 +274,13 @@ class Team
         return false;
         }   
     }
-   
     
+    public function flag_w2retire($bool) {
+    /*
+    * Set player wants to retire flag
+    */
+        return mysql_query("UPDATE players SET wants_retire = ".(($bool) ? 1 : 0)." WHERE player_id = $this->player_id");
+    }
     
     // End Seasons Played and Wants to Retire %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     

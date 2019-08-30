@@ -127,6 +127,8 @@ $core_tables = array(
         'inj_ni'    => $CT_cols['chr'].' DEFAULT 0',
         'win_pct' => $CT_cols['win_pct'].' DEFAULT 0', # All-time win pct (across all matches).
         'seasons_played' => $CT_cols['seasons_played'].' DEFAULT 0', # TEST for seasons played tracking
+        'wants_retire' => $CT_cols['wants_retire'].' DEFAULT 0', # TEST for seasons played tracking
+        
         
     ),
     'memberships' => array(

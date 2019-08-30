@@ -47,7 +47,7 @@ class Player
     public $may_buy_new_skill = 0;
     public $value = 0;
     public $date_died = '';
-    // TODO adding seasons played and wants to retire
+    // Adding seasons played and wants to retire
     // Sets default value for display
     public $seasons_played = 0;
     public $wants_retire = 0;
@@ -384,9 +384,11 @@ class Player
         return mysql_query($query);
     }
     
-    
-    
-    
+     // Set retirement desire flag %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    public function flag_wantRetire($delta) {
+        $query = "UPDATE players SET wants_retire = 'Yes' WHERE player_id = $this->player_id";
+        return mysql_query($query);
+    }
     
 
     public function dval($val = 0) {
