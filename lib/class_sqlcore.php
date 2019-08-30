@@ -209,7 +209,7 @@ class SQLCore
 
 			/* Player DPROPS */
 			DECLARE done INT DEFAULT 0;
-			DECLARE inj_ma,inj_av,inj_ag,inj_st,inj_ni, ma,av,ag,st, seasons_played '.$CT_cols['chr'].';  /* TEST */
+			DECLARE inj_ma,inj_av,inj_ag,inj_st,inj_ni, ma,av,ag,st '.$CT_cols['chr'].';
 			DECLARE ma_ua,av_ua,ag_ua,st_ua '.$CT_cols['chr_ua'].';
 			DECLARE value '.$CT_cols['pv'].';
 			DECLARE status '.$core_tables['players']['status'].';
@@ -309,7 +309,7 @@ class SQLCore
 						SET players.inj_ma = inj_ma, players.inj_av = inj_av, players.inj_ag = inj_ag, players.inj_st = inj_st, players.inj_ni = inj_ni,
 							players.ma = ma, players.av = av, players.ag = ag, players.st = st,
 							players.ma_ua = ma_ua, players.av_ua = av_ua, players.ag_ua = ag_ua, players.st_ua = st_ua,
-							players.value = value, players.status = status, players.date_died = date_died, players.seasons_played = seasons_played /* TEST */
+							players.value = value, players.status = status, players.date_died = date_died
 						WHERE players.player_id = pid;
 
 					/* All-time win percentage */
@@ -703,17 +703,16 @@ class SQLCore
 				DECLARE tid '.$CT_cols[T_OBJ_TEAM].';
 				DECLARE f_cid '.$CT_cols[T_OBJ_COACH].';
 				DECLARE f_rid '.$CT_cols[T_OBJ_RACE].';
-				DECLARE f_rname, f_cname, f_tname, f_pos_name, seasons_played '.$CT_cols['name'].';  /* TEST */
+				DECLARE f_rname, f_cname, f_tname, f_pos_name '.$CT_cols['name'].';
 				DECLARE cur_p CURSOR FOR SELECT player_id FROM players;
 				DECLARE cur_t CURSOR FOR SELECT team_id FROM teams;
 				DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
-				DECLARE seasons_played '.$CT_cols[T_OBJ_PLAYER].';  /* TEST  */
 
 				OPEN cur_p;
 				REPEAT
 					FETCH cur_p INTO pid;
 					IF NOT done THEN
-						CALL getPlayerRels(pid, f_cid,f_rid, f_cname,f_rname, f_tname, f_pos_name, seasons_played);  /* TEST */
+						CALL getPlayerRels(pid, f_cid,f_rid, f_cname,f_rname, f_tname, f_pos_name);
 						UPDATE players SET
 							players.f_cid = f_cid, players.f_rid = f_rid,
 							players.f_cname = f_cname, players.f_rname = f_rname,
@@ -747,7 +746,7 @@ class SQLCore
 				NOT DETERMINISTIC
 				READS SQL DATA
 			BEGIN
-				SELECT coaches.coach_id, races.race_id, coaches.name, races.name, teams.name, game_data_players.pos, seasons_played /* TEST */
+				SELECT coaches.coach_id, races.race_id, coaches.name, races.name, teams.name, game_data_players.pos
 				INTO f_cid, f_rid, f_cname, f_rname, f_tname, f_pos_name
 				FROM players,teams,coaches,races,game_data_players
 				WHERE player_id = pid AND owned_by_team_id = team_id AND owned_by_coach_id = coach_id AND teams.f_race_id = race_id AND f_pos_id = pos_id;
