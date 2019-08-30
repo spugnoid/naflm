@@ -30,7 +30,8 @@ class Player
     public $owned_by_team_id = 0;
     public $nr = 0;
     public $f_pos_id = 0;
-    public $position = ''; public $pos = ''; // $position duplicate. $position may be edited for display purposes (=not actual position string used in $DEA). This is though.
+    public $position = ''; 
+    public $pos = ''; // $position duplicate. $position may be edited for display purposes (=not actual position string used in $DEA). This is though.
     public $date_bought = '';
     public $date_sold   = '';
     public $ach_ma = 0;
@@ -40,12 +41,16 @@ class Player
     public $ach_nor_skills = array();
     public $ach_dob_skills = array();
     public $extra_skills   = array();
-    public $current_skills   = array();
+    public $current_skills = array();
     public $extra_spp = 0;
     public $extra_val = 0;
     public $may_buy_new_skill = 0;
     public $value = 0;
     public $date_died = '';
+    // TODO adding seasons played and wants to retire
+    // Sets default value for display
+    public $seasons_played = 0;
+    public $wants_retire = 0;
 
     // Characteristics
     public $ma = 0;
@@ -97,11 +102,9 @@ class Player
      ***************/
     function __construct($player_id) {
         global $DEA;
-        // Get relaveant store game data.
+        // Get relevant store game data. From game_data files
         $result = mysql_query("SELECT player_id,
-            game_data_players.qty AS 'qty', game_data_players.pos AS 'pos', game_data_players.skills AS 'def_skills', 
-            game_data_players.ma AS 'def_ma', game_data_players.st AS 'def_st', game_data_players.ag AS 'def_ag', game_data_players.av AS 'def_av'
-            FROM players, game_data_players WHERE player_id = $player_id AND f_pos_id = pos_id");
+            game_data_players.qty AS 'qty', game_data_players.pos AS 'pos', game_data_players.skills AS 'def_skills', game_data_players.ma AS 'def_ma', game_data_players.st AS 'def_st', game_data_players.ag AS 'def_ag', game_data_players.av AS 'def_av' FROM players, game_data_players WHERE player_id = $player_id AND f_pos_id = pos_id");
         foreach (mysql_fetch_assoc($result) as $col => $val) {
             $this->$col = ($val) ? $val : 0;
         }

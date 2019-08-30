@@ -27,6 +27,7 @@ $CT_cols = array(
     'streak'   => 'SMALLINT UNSIGNED',
     'skills'   => 'VARCHAR('.(19+20*3).')', # Set limit to 20 skills, ie. chars = 19 commas + 20*3 (max 20 integers of 3 decimals (assumed upper limit)).
     'pts'      => 'FLOAT SIGNED',
+    
 );
 
 $core_tables = array(
@@ -126,6 +127,7 @@ $core_tables = array(
         'inj_av'    => $CT_cols['chr'].' DEFAULT 0',
         'inj_ni'    => $CT_cols['chr'].' DEFAULT 0',
         'win_pct' => $CT_cols['win_pct'].' DEFAULT 0', # All-time win pct (across all matches).
+
     ),
     'memberships' => array(
         'cid'   => $CT_cols[T_OBJ_COACH].' NOT NULL',
