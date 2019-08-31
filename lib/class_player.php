@@ -30,7 +30,8 @@ class Player
     public $owned_by_team_id = 0;
     public $nr = 0;
     public $f_pos_id = 0;
-    public $position = ''; public $pos = ''; // $position duplicate. $position may be edited for display purposes (=not actual position string used in $DEA). This is though.
+    public $position = ''; 
+    public $pos = ''; // $position duplicate. $position may be edited for display purposes (=not actual position string used in $DEA). This is though.
     public $date_bought = '';
     public $date_sold   = '';
     public $ach_ma = 0;
@@ -40,12 +41,17 @@ class Player
     public $ach_nor_skills = array();
     public $ach_dob_skills = array();
     public $extra_skills   = array();
-    public $current_skills   = array();
+    public $current_skills = array();
     public $extra_spp = 0;
     public $extra_val = 0;
     public $may_buy_new_skill = 0;
     public $value = 0;
     public $date_died = '';
+    // Adding seasons played and wants to retire. Required to select data from new columns
+    // Sets default value for display. NOTE Also need to add new columns to mysql.php
+    public $seasons_played = 0;
+    public $wants_retire = 0;
+    public $incentive = 0;
 
     // Characteristics
     public $ma = 0;
@@ -97,11 +103,9 @@ class Player
      ***************/
     function __construct($player_id) {
         global $DEA;
-        // Get relaveant store game data.
+        // Get relevant store game data. From game_data files
         $result = mysql_query("SELECT player_id,
-            game_data_players.qty AS 'qty', game_data_players.pos AS 'pos', game_data_players.skills AS 'def_skills', 
-            game_data_players.ma AS 'def_ma', game_data_players.st AS 'def_st', game_data_players.ag AS 'def_ag', game_data_players.av AS 'def_av'
-            FROM players, game_data_players WHERE player_id = $player_id AND f_pos_id = pos_id");
+            game_data_players.qty AS 'qty', game_data_players.pos AS 'pos', game_data_players.skills AS 'def_skills', game_data_players.ma AS 'def_ma', game_data_players.st AS 'def_st', game_data_players.ag AS 'def_ag', game_data_players.av AS 'def_av' FROM players, game_data_players WHERE player_id = $player_id AND f_pos_id = pos_id");
         foreach (mysql_fetch_assoc($result) as $col => $val) {
             $this->$col = ($val) ? $val : 0;
         }
@@ -372,6 +376,55 @@ class Player
         $query = "UPDATE players SET extra_spp = IF(extra_spp IS NULL, $delta, extra_spp + ($delta)) WHERE player_id = $this->player_id";
         return mysql_query($query);
     }
+	
+		// NOTE Delta for players seasons played ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public function xdsp($delta) {
+        $query = "UPDATE players SET seasons_played = GREATEST(seasons_played + $delta, 0) WHERE player_id = $this->player_id";
+        return mysql_query($query);
+    }
+	
+	// NOTE Unflag player wants to retire ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public function xur($delta) {
+        $query = "UPDATE players SET wants_retire = NULL WHERE player_id = $this->player_id";
+        return mysql_query($query);
+    }
+  
+    
+    // NOTE Increment player seasons played COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    public function incr_splayed($delta) {
+        $query = "UPDATE players SET seasons_played = IF(seasons_played IS NULL, $delta, seasons_played + ($delta)) WHERE player_id = $this->player_id";
+        return mysql_query($query);
+    }
+    
+     // NOTE Set retirement desire flag COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    public function flag_wantRetire($text) {
+        $query = "UPDATE players SET wants_retire = 'Yes' WHERE player_id = $this->player_id";
+		 return mysql_query($query);
+    }
+	
+	// NOTE Calculate incentive COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	 // THIS WORKS!
+    /*
+	public function calc_incentive($math) {
+		$query = "UPDATE players SET incentive = seasons_played * 20000 WHERE player_id = $this->player_id";
+		 return mysql_query($query);
+    }
+    */
+    
+    // NOTE Calculate incentive COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	 // THIS WORKS!
+    public function calc_incentive($math) {
+    	$query = "UPDATE players
+    	SET incentive = seasons_played * 20000 WHERE wants_retire = 'Yes' AND player_id = $this->player_id";
+    	return mysql_query($query);
+    }
+    // NOTE zero incentive ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public function unCalc_incentive($math) {
+    	$query = "UPDATE players
+    	SET incentive = 0 WHERE player_id = $this->player_id";
+    	return mysql_query($query);
+    }
 
     public function dval($val = 0) {
         $query = "UPDATE players SET extra_val = $val WHERE player_id = $this->player_id";
@@ -605,7 +658,7 @@ class Player
         list($CNT) = mysql_fetch_row($result);
         return ($CNT == 1);
     }
-
+    // NOTE refer to this block when calculating Incentive
     public static function getPlayerStatus($player_id, $match_id) {
         /**
          * Returns player status for specific $match_id, or current status if $match_id == -1 (latest match).

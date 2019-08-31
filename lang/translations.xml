@@ -138,6 +138,7 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
             <notice_spp><![CDATA[<i>Note</i>: <b>If</b> star players could earn SPP they would have the amount correspondng to the SPP column.]]></notice_spp>
             <sortedagainst>Sorted against</sortedagainst>
             <confirm_box>Are you sure?</confirm_box>
+			      <incentive>Incentive</incentive>
 
             <!-- nodeSelector() -->
             <displayfrom>Display from</displayfrom>
@@ -302,6 +303,10 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                     <buy_goods>Buy team goods</buy_goods>
                     <drop_goods>Let go of team goods</drop_goods>
                     <ready_state>Set ready state</ready_state>
+                    <!-- NOTE Add seasons played and want to retire here  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  -->
+                    <s_played>Track Season Played</s_played>
+					          <want2retire>Player Wants to Retire</want2retire>
+
                     <retire>Retire team</retire>
                     <delete>Delete team</delete>
 
@@ -327,6 +332,9 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                         <ready_state> <![CDATA[ This team attribute allows coaches to signal other coaches/teams whether or not this team is interested in playing any matches. ]]> </ready_state>
                         <retire> <![CDATA[ Retire team.<br>Once retired the team is no longer manageable.<br>Admins can un-retire teams. The retirement takes effect immediately, but will first be visible on <b>next page reload</b>. ]]> </retire>
                         <delete> <![CDATA[ Delete team.<br>For the sake of keeping league statistics intact you are not allowed to delete teams which have played matches. The deletion takes effect immediately, but will first be visible on <b>next page reload</b>. ]]> </delete>
+                        <s_played> <![CDATA[ Another season down.<br>After each season, apply this function to each player on the roster. <b>If they are still alive!</b>. ]]> </s_played>
+                        <want2retire> <![CDATA[ Starting with 2 seasons under their belt, roll 1D6. If the result is less than Seasons Played, the player wants to retire. <b>The incentive goes up every season!</b>. ]]> </want2retire>
+
                     </desc>
                 </box_tm>
 
@@ -344,6 +352,8 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                     <ff>Manage team fan factor</ff>
                     <removeNiggle>Remove player niggle</removeNiggle>
                     <dff>Redraft FF Change</dff>
+                    <xdsp>Adjust Seasons Played</xdsp>
+                    <xur>Unflag Player Wants to Retire</xur>
 
                     <desc>
                         <unhire_journeyman> <![CDATA[ Regret permanently hiring a journeyman.<br> This only works on players from a 0-16 allowed position on your team's roster. ]]> </unhire_journeyman>
@@ -358,6 +368,10 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                         <ach_skills> <![CDATA[ Remove a players achieved skills. This makes the player able to rechoose a skill. ]]> </ach_skills>
                         <ff> <![CDATA[ Make changes to team's fan factor .]]> </ff>
                         <removeNiggle> <![CDATA[ Remove one of a players niggling injuries.]]> </removeNiggle>
+
+						<xdsp> <![CDATA[ Adjust Number of Seasons Played. ]]> </xdsp>
+						<xur> <![CDATA[ Unflag a Player Who Wants to Retire. ]]> </xur>
+
                     </desc>
                 </box_admin>
             </team>

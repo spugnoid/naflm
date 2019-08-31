@@ -25,7 +25,7 @@ class Team
     public $imported          = false;
     public $is_retired        = 0;
     public $value = 0; public $tv = 0; # Identical.
-    public $ff_bought = 0;
+    public $ff_bought = 0; # Required to pull data from new columns for teams
 
     // MySQL stored initials for imported teams
     public $won_0    = 0;
@@ -247,7 +247,8 @@ class Team
         }
     }
     
-     public function dffactor($delta) {
+    // NOTE Delta for won Fan Factor ff ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    public function dffactor($delta) {
     /*
     * Add a delta to team's won Fan Factor. For Redraft Purposes
     */
@@ -257,7 +258,7 @@ class Team
         return true;
         } else {
         return false;
-        }
+        }   
     }
 
 	public function setff_bought($integer) {
