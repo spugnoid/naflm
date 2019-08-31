@@ -126,8 +126,9 @@ $core_tables = array(
         'inj_av'    => $CT_cols['chr'].' DEFAULT 0',
         'inj_ni'    => $CT_cols['chr'].' DEFAULT 0',
         'win_pct' => $CT_cols['win_pct'].' DEFAULT 0', # All-time win pct (across all matches).
-        'seasons_played' => $CT_cols['seasons_played'].' DEFAULT 0', # TEST for seasons played tracking
-        'wants_retire' => $CT_cols['wants_retire'].' DEFAULT 0', # TEST for seasons played tracking
+        'seasons_played' => $CT_cols['seasons_played'].' DEFAULT 0', # REQUIRED for seasons played tracking
+        'wants_retire' => $CT_cols['wants_retire'].' DEFAULT 0', # REQUIRED for retirement tracking
+		'incentive' => $CT_cols['incentive'].' DEFAULT 0', # REQUIRED for retirement tracking
         
         
     ),

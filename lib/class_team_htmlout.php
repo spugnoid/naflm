@@ -336,10 +336,6 @@ $p->mv_cas = "$p->mv_bh/$p->mv_si/$p->mv_ki";
 $p->mv_spp = "$p->mv_spp/$p->extra_spp";
 
 }
-// TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//$p->seasons_played = $p->seasons_played;
-
-
 
 // Characteristic's colors
 foreach (array('ma', 'ag', 'av', 'st') as $chr) {
@@ -473,7 +469,7 @@ $fields = array(
 'mv_mvp'    => array('desc' => 'MVP'),
 'mv_spp'    => array('desc' => ($DETAILED) ? 'SPP/extra' : 'SPP', 'nosort' => ($DETAILED) ? true : false),
 'value'     => array('desc' => $lng->getTrn('common/value'), 'kilo' => true, 'suffix' => 'k'),
-// Display columns for seasons played and wants to retire status on the team page
+// NOTE Display columns for seasons played and wants to retire status on the team page
 'seasons_played' => array('desc' => 'Seasons'),
 'wants_retire' => array('desc' => 'Retiring?'),
 'incentive' => array('desc' => 'Incentive'),
