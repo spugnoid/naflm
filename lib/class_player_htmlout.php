@@ -261,8 +261,8 @@ class Player_HTMLOUT extends Player
 					<td><?php echo $p->wants_retire; ?></td>
 				</tr>
 				<tr>
-					<td><b>Incentive</b></td>
-					<td><?php echo $p->incentive; ?></td>
+					<td><b><?php echo $lng->getTrn('common/incentive');?></b></td>
+					<td><?php echo $p->incentive/1000 .'k' ?></td>
 				</tr>
 				
 				
