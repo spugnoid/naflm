@@ -270,15 +270,14 @@ Module::run('LogSubSys', array('createEntry', T_LOG_FF, $coach->coach_id, "Coach
 SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team->team_id));
 break;    
 		
-// NOTE delta to Seasons Player ADMIN FUNCTION
+// NOTE delta to Seasons Player ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 case 'xdsp': status($p->xdsp(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']));
 		status($p->calc_incentive(($_POST['math']) )); break;
 			
 
-// NOTE Un-wantToRetire a player ADMIN FUNCTION
+// NOTE Un-wantToRetire a player ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 case 'xur': status($p->xur(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount'])); 
-		status($p->calc_incentive(($_POST['math']) )); break; 
-			
+		status($p->unCalc_incentive(($_POST['math']) )); break; 
 
 }
 }
@@ -1562,10 +1561,8 @@ objsort($players, array('+nr'));
 			<?php
 break;
 
-		/***************
+/***************
 * NOTE Unflag Player Wants to Retire ADMIN FUNCTION
-
-need to select player first!
 **************/
 case 'xur':
 echo $lng->getTrn('profile/team/box_admin/desc/xur');
@@ -1590,37 +1587,6 @@ objsort($players, array('+nr'));
 				<input type="hidden" name="type" value="xur">
 				<?php
 break;
-		
-		
-	/*	
-		//uuuuuuuuuuuuuuuuuuu
-		echo $lng->getTrn('profile/team/box_tm/desc/want2retire');
-?>
-				<hr><br>
-				<?php echo $lng->getTrn('common/player');?>:<br>
-				<select name="player">
-					<?php
-$DISABLE = true;
-objsort($players, array('+is_dead', '+name'));
-foreach ($players as $p) {
-if (!$p->is_sold) {
-echo "<option value='$p->player_id'".(($p->is_dead) ? ' style="background-color:'.COLOR_HTML_DEAD.';"' : '').">$p->nr $p->name</option>";
-$DISABLE = false;
-}
-}
-objsort($players, array('+nr'));
-?>
-				</select>
-				<hr><br>
-				<input type="checkbox" UNCHECKED name="incr" value="+"> Yes I do!
-				<input type="hidden" name="type" value="want2retire">
-				<?php
-break;
-		
-		//uuuuuuuuuuuuuuuuuuuuuuuuuuuuu
-		*/
-
-		
 
 }
 ?>
