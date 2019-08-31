@@ -11,7 +11,8 @@ die ('Could not connect:' . mysql_error());
 mysql_select_db($db_name, $connection);
 
 $added= mysql_query("ALTER TABLE players ADD COLUMN seasons_played TINYINT SIGNED NOT NULL");
-$added= mysql_query("ALTER TABLE players ADD COLUMN wants_retire BOOLEAN NOT NULL DEFAULT FALSE");
+$added= mysql_query("ALTER TABLE players ADD COLUMN wants_retire VARCHAR NOT NULL DEFAULT No"); # No might not work
+$added= mysql_query("ALTER TABLE players ADD COLUMN incentive MEDIUMINT NOT NULL DEFAULT 0");
 
 if($added !== FALSE)
 {
