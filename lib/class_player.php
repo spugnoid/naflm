@@ -385,7 +385,7 @@ class Player
 	
 	// NOTE Unflag player wants to retire ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	public function xur($delta) {
-        $query = "UPDATE players SET wants_retire = 'No' WHERE player_id = $this->player_id";
+        $query = "UPDATE players SET wants_retire = NULL WHERE player_id = $this->player_id";
         return mysql_query($query);
     }
   
