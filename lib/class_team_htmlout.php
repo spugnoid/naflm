@@ -1571,13 +1571,54 @@ case 'xur':
 echo $lng->getTrn('profile/team/box_admin/desc/xur');
 ?>
 			<hr><br>
-			Unflag Player Wants to Retire:<br>
-			<input type="radio" CHECKED name="sign" value="+">+
-			<input type="radio" name="sign" value="-">-
-			<input type='text' name="amount" maxlength=1 size=1>
-			<input type="hidden" name="type" value="xur">
-			<?php
+				<?php echo $lng->getTrn('common/player');?>:<br>
+				<select name="player">
+					<?php
+$DISABLE = true;
+objsort($players, array('+is_dead', '+name'));
+foreach ($players as $p) {
+if (!$p->is_sold) {
+echo "<option value='$p->player_id'".(($p->is_dead) ? ' style="background-color:'.COLOR_HTML_DEAD.';"' : '').">$p->nr $p->name</option>";
+$DISABLE = false;
+}
+}
+objsort($players, array('+nr'));
+?>
+				</select>
+				<hr><br>
+				<input type="checkbox" UNCHECKED name="incr" value="+"> I changed my mind!
+				<input type="hidden" name="type" value="xur">
+				<?php
 break;
+		
+		
+	/*	
+		//uuuuuuuuuuuuuuuuuuu
+		echo $lng->getTrn('profile/team/box_tm/desc/want2retire');
+?>
+				<hr><br>
+				<?php echo $lng->getTrn('common/player');?>:<br>
+				<select name="player">
+					<?php
+$DISABLE = true;
+objsort($players, array('+is_dead', '+name'));
+foreach ($players as $p) {
+if (!$p->is_sold) {
+echo "<option value='$p->player_id'".(($p->is_dead) ? ' style="background-color:'.COLOR_HTML_DEAD.';"' : '').">$p->nr $p->name</option>";
+$DISABLE = false;
+}
+}
+objsort($players, array('+nr'));
+?>
+				</select>
+				<hr><br>
+				<input type="checkbox" UNCHECKED name="incr" value="+"> Yes I do!
+				<input type="hidden" name="type" value="want2retire">
+				<?php
+break;
+		
+		//uuuuuuuuuuuuuuuuuuuuuuuuuuuuu
+		*/
 
 		
 
