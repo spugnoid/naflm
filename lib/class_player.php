@@ -404,10 +404,12 @@ class Player
     }
 	
 	// NOTE Calculate incentive COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	 public function calc_incentive($math) {
+	 // THIS WORKS!
+	public function calc_incentive($math) {
 		$query = "UPDATE players SET incentive = seasons_played * 20000 WHERE player_id = $this->player_id";
 		 return mysql_query($query);
     }
+	
 
     public function dval($val = 0) {
         $query = "UPDATE players SET extra_val = $val WHERE player_id = $this->player_id";
