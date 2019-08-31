@@ -390,7 +390,6 @@ class Player
         $query = "UPDATE players SET wants_retire = 'Yes' WHERE player_id = $this->player_id";
         return mysql_query($query);
     }
-    
 
     public function dval($val = 0) {
         $query = "UPDATE players SET extra_val = $val WHERE player_id = $this->player_id";

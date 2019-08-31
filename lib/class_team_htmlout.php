@@ -188,7 +188,12 @@ case 'drop_goods':      status($team->drop($_POST['thing'])); break;
 case 'ready_state':     status($team->setReady(isset($_POST['bool']))); break;
 
 // NOTE Add case for incrementing seasons played
+/*
 case 's_played':        status($p->incr_splayed(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount'])); break;	
+*/
+		# TEST copy here
+		case 's_played':        status($p->incr_splayed(($_POST['incr'] == '+' ? 1 : -1) )); 
+		break;
 // NOTE Add case for flagging player wants to retire
 #case 'want2retire':     status($p->incr_splayed(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount'])); break;	
 
@@ -1886,10 +1891,15 @@ objsort($players, array('+nr'));
 ?>
 				</select>
 				<br><br>
-				<input type="checkbox" UNCHECKED name="sign" value="+">+
+				<!-- <input type="checkbox" UNCHECKED name="sign" value="+"> -->
 				<!-- <input type="radio" name="sign" value="-">- -->
-				<input type='text' name='amount' maxlength="1" size="1"> Add a Season?
+				<!--<input type='text' name='amount' maxlength="1" size="1"> Add a Season? -->
+				<!--<input type="hidden" name="type" value="s_played"> -->
+																 
+				<input type="checkbox" UNCHECKED name="incr" value="+"> Add a Season?
+				<!-- <input type='text' name='amount' maxlength="1" size="1"> Add a Season? -->
 				<input type="hidden" name="type" value="s_played">
+				
 				<?php
 break;
 
