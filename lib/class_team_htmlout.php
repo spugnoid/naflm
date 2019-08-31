@@ -474,8 +474,9 @@ $fields = array(
 'mv_spp'    => array('desc' => ($DETAILED) ? 'SPP/extra' : 'SPP', 'nosort' => ($DETAILED) ? true : false),
 'value'     => array('desc' => $lng->getTrn('common/value'), 'kilo' => true, 'suffix' => 'k'),
 // Display columns for seasons played and wants to retire status on the team page
-'seasons_played' => array('desc' => 'Seasons Played'),
-'wants_retire' => array('desc' => 'Wants to Retire'),
+'seasons_played' => array('desc' => 'Seasons'),
+'wants_retire' => array('desc' => 'Retiring?'),
+'incentive' => array('desc' => 'Incentive'),
 );
 echo "<a href=".urlcompile(T_URL_PROFILE,T_OBJ_TEAM,$this->team_id,false,false)."&amp;detailed=".(($DETAILED) ? 0 : 1).">".$lng->getTrn('profile/team/viewtoggle')."</a><br><br>\n";
 HTMLOUT::sort_table(

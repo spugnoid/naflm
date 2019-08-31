@@ -257,7 +257,7 @@ class Player_HTMLOUT extends Player
 					<td><?php echo $p->seasons_played; ?></td>
 				</tr>
 				<tr>
-					<td><b>Wants to Retire?</b></td>
+					<td><b>Retiring?</b></td>
 					<td><?php echo $p->wants_retire; ?></td>
 				</tr>
 				<tr>

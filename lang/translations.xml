@@ -303,8 +303,10 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                     <drop_goods>Let go of team goods</drop_goods>
                     <ready_state>Set ready state</ready_state>
                     
-                    <!-- Add seasons played and want to retire here  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  -->
-                    
+                    <!-- NOTE Add seasons played and want to retire here  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  -->
+                    <s_played>Track Season Played</s_played>
+					<want2retire>Player Wants to Retire</want2retire>
+					
                     <retire>Retire team</retire>
                     <delete>Delete team</delete>
 
@@ -330,6 +332,9 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                         <ready_state> <![CDATA[ This team attribute allows coaches to signal other coaches/teams whether or not this team is interested in playing any matches. ]]> </ready_state>
                         <retire> <![CDATA[ Retire team.<br>Once retired the team is no longer manageable.<br>Admins can un-retire teams. The retirement takes effect immediately, but will first be visible on <b>next page reload</b>. ]]> </retire>
                         <delete> <![CDATA[ Delete team.<br>For the sake of keeping league statistics intact you are not allowed to delete teams which have played matches. The deletion takes effect immediately, but will first be visible on <b>next page reload</b>. ]]> </delete>
+						<s_played> <![CDATA[ Another season down.<br>After each season, apply this function to each player on the roster. <b>If they are still alive!</b>. ]]> </s_played>
+						<want2retire> <![CDATA[ Starting with 2 seasons under their belt, roll 1D6. If the result is less than Seasons Played, the player wants to retire. <b>The incentive goes up every season!</b>. ]]> </want2retire>
+						
                     </desc>
                 </box_tm>
 

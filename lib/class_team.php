@@ -261,39 +261,6 @@ class Team
         return false;
         }   
     }
-    
-	
-    // NOTE Increment Seasons Played COACH FUNCTION --NOT REQUIRED HERE? %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    #public function incr_splayed($delta) {
-    /*
-    * Increment the number of seasons a player has played
-    */
-	/*
-        $query = "UPDATE players SET seasons_played = GREATEST(seasons_played + $delta, 0) WHERE player_id = $this->player_id";
-        if (mysql_query($query)) {
-        $this->seasons_played += $delta;
-        return true;
-        } else {
-        return false;
-        }   
-    }
-    
-	// NOTE Set Wants to Retire COACH FUNCTION --NOT REQUIRED HERE?%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    #public function set_w2retire($text) {
-    /*
-    * Set player wants to retire flag
-    */
-	/*
-        $query = "UPDATE players SET wants_retire = ('Yes') WHERE player_id = $this->player_id";
-        if (mysql_query($query)) {
-        $this->wants_retire = $text;
-        return true;
-        } else {
-        return false;
-        }  
-    }    
-*/
 
 	public function setff_bought($integer) {
         /**
