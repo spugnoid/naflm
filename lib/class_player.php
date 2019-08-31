@@ -50,7 +50,7 @@ class Player
     // Adding seasons played and wants to retire. Required to select data from new columns
     // Sets default value for display. NOTE Also need to add new columns to mysql.php
     public $seasons_played = 0;
-    public $wants_retire = 0; // TEST
+    public $wants_retire = 0; 
     public $incentive = 0;
 
     // Characteristics
@@ -393,7 +393,7 @@ class Player
 	
 	// NOTE Calculate incentive COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	 public function calc_incentive($math) {
-		$query = "UPDATE players SET incentive = seasons_played * 20 WHERE player_id = $this->player_id";
+		$query = "UPDATE players SET incentive = seasons_played * 20000 WHERE player_id = $this->player_id";
 		 return mysql_query($query);
     }
 
