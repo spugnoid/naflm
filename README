@@ -2,5 +2,7 @@ Added Spike 6 data. Also added all star players to team rosters so they can be r
 
 Also added ability for Admin to deduct FF for redraft purposes. This affects 'won' FF, not 'bought' FF for which there is already an admin tool.
 
+Coaches can add 'seasons played' and set a flag for each player when they decide they want to retire as per BB2016 redrafting rules. Admin function to undo coach changes as well.
+Automatically calculates the Incentive required to rehire a retiring player next season.
 
 
