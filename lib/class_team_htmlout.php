@@ -188,14 +188,9 @@ case 'drop_goods':      status($team->drop($_POST['thing'])); break;
 case 'ready_state':     status($team->setReady(isset($_POST['bool']))); break;
 
 // NOTE Add case for incrementing seasons played
-/*
-case 's_played':        status($p->incr_splayed(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount'])); break;	
-*/
-		# TEST copy here
-		case 's_played':        status($p->incr_splayed(($_POST['incr'] == '+' ? 1 : -1) )); 
-		break;
+case 's_played':        status($p->incr_splayed(($_POST['incr'] == '+' ? 1 : -1) )); break;
 // NOTE Add case for flagging player wants to retire
-#case 'want2retire':     status($p->incr_splayed(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount'])); break;	
+case 'want2retire':     status($p->flag_wantRetire(($_POST['flag'] == '+' ? 1 : -1) )); break;	
 
 case 'retire':          status(isset($_POST['bool']) && $team->setRetired(true)); break;
 case 'delete':          status(isset($_POST['bool']) && $team->delete()); break;
@@ -1890,16 +1885,9 @@ $DISABLE = false;
 objsort($players, array('+nr'));
 ?>
 				</select>
-				<br><br>
-				<!-- <input type="checkbox" UNCHECKED name="sign" value="+"> -->
-				<!-- <input type="radio" name="sign" value="-">- -->
-				<!--<input type='text' name='amount' maxlength="1" size="1"> Add a Season? -->
-				<!--<input type="hidden" name="type" value="s_played"> -->
-																 
+				<br><br>												 
 				<input type="checkbox" UNCHECKED name="incr" value="+"> Add a Season?
-				<!-- <input type='text' name='amount' maxlength="1" size="1"> Add a Season? -->
 				<input type="hidden" name="type" value="s_played">
-				
 				<?php
 break;
 
@@ -1911,7 +1899,22 @@ case 'want2retire':
 echo $lng->getTrn('profile/team/box_tm/desc/want2retire');
 ?>
 				<hr><br>
-				<input type="checkbox" UNCHECKED name="bool" value="1"> Sure Does!
+				<?php echo $lng->getTrn('common/player');?>:<br>
+				<select name="player">
+					<?php
+$DISABLE = true;
+objsort($players, array('+is_dead', '+name'));
+foreach ($players as $p) {
+if (!$p->is_sold) {
+echo "<option value='$p->player_id'".(($p->is_dead) ? ' style="background-color:'.COLOR_HTML_DEAD.';"' : '').">$p->nr $p->name</option>";
+$DISABLE = false;
+}
+}
+objsort($players, array('+nr'));
+?>
+				</select>
+				<hr><br>
+				<input type="checkbox" UNCHECKED name="incr" value="+"> Yes I do!
 				<input type="hidden" name="type" value="want2retire">
 				<?php
 break;
