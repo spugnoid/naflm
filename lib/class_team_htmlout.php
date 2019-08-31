@@ -261,7 +261,7 @@ SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team
 break;
 case 'removeNiggle': status($p->removeNiggle()); break;
 
-// NOTE won FF delta ADMIN FUNCTION
+// NOTE won FF delta ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 case 'dff':
 status($team->dffactor($dff = ($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']));
 if (Module::isRegistered('LogSubSys')) {
@@ -272,12 +272,19 @@ break;
 		
 // NOTE delta to Seasons Player ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 case 'xdsp': status($p->xdsp(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']));
-		status($p->calc_incentive(($_POST['math']) )); break;
+		status($p->calc_incentive(($_POST['math']) )); 
+if (Module::isRegistered('LogSubSys')) {
+Module::run('LogSubSys', array('createEntry', T_LOG_XDSP, $coach->coach_id, "Coach '$coach->name' (ID=$coach->coach_id) decremented a Season Played for player '$p->name' (ID=$p->player_id)"));
+}
+		break;
 			
-
 // NOTE Un-wantToRetire a player ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 case 'xur': status($p->xur(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount'])); 
-		status($p->unCalc_incentive(($_POST['math']) )); break; 
+		status($p->unCalc_incentive(($_POST['math']) )); 
+		if (Module::isRegistered('LogSubSys')) {
+Module::run('LogSubSys', array('createEntry', T_LOG_XUR, $coach->coach_id, "Coach '$coach->name' (ID=$coach->coach_id) unflagged Wants to Retire for '$p->name' (ID=$p->player_id)"));
+}
+break; 
 
 }
 }
