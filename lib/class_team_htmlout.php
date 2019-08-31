@@ -187,9 +187,9 @@ case 'buy_goods':       status($team->buy($_POST['thing'])); break;
 case 'drop_goods':      status($team->drop($_POST['thing'])); break;
 case 'ready_state':     status($team->setReady(isset($_POST['bool']))); break;
 
-// Add case for incrementing seasons played
+// NOTE Add case for incrementing seasons played
 case 's_played':        status($p->incr_splayed(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount'])); break;	
-// Add case for flagging player wants to retire
+// NOTE Add case for flagging player wants to retire
 #case 'want2retire':     status($p->incr_splayed(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount'])); break;	
 
 case 'retire':          status(isset($_POST['bool']) && $team->setRetired(true)); break;
@@ -257,7 +257,7 @@ SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team
 break;
 case 'removeNiggle': status($p->removeNiggle()); break;
 
-// My addition to add FF delta
+// NOTE My addition to add won FF delta
 case 'dff':
 status($team->dffactor($dff = ($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']));
 if (Module::isRegistered('LogSubSys')) {
@@ -265,7 +265,7 @@ Module::run('LogSubSys', array('createEntry', T_LOG_FF, $coach->coach_id, "Coach
 }
 SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team->team_id));
 break;    
-// End my addition to ff
+
 }
 }
 $team->setStats(false,false,false); # Reload fields in case they changed after team actions made.
@@ -1503,8 +1503,9 @@ $DISABLE = false;
 			<input type="hidden" name="type" value="removeNiggle">
 			<?php
 break;
+		
 /***************
-* Adjust FF for Redraft
+* NOTE Adjust FF for Redraft ADMIN FUNCTION
 **************/
 case 'dff':
 echo $lng->getTrn('profile/team/box_admin/desc/dff');
@@ -1519,39 +1520,15 @@ echo $lng->getTrn('profile/team/box_admin/desc/dff');
 break;
 
 /*
-* need to add seasons played and want to retire here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+* NOTE need to add seasons played and want to retire here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 */
-case 's_played':
-echo $lng->getTrn('profile/team/box_tm/desc/s_played');
-?>
-			<hr><br>
-			<?php echo $lng->getTrn('common/player');?>:<br>
-			<select name="player">
-				<?php
-$DISABLE = true;
-objsort($players, array('+is_dead', '+name'));
-foreach ($players as $p) {
-if (!$p->is_sold) {
-echo "<option value='$p->player_id'".(($p->is_dead) ? ' style="background-color:'.COLOR_HTML_DEAD.';"' : '').">$p->nr $p->name</option>";
-$DISABLE = false;
-}
-}
-objsort($players, array('+nr'));
-?>
-			</select>
-			<br><br>
-			<input type="radio" CHECKED name="sign" value="+">+
-			<input type="radio" name="sign" value="-">-
-			<input type='text' name='amount' maxlength="5" size="5"> &Delta; SPP
-			<input type="hidden" name="type" value="spp">
-			<?php
-break;
+
 }
 ?>
-			<br><br>
-			<input type="submit" name="button" value="OK" <?php echo ($DISABLE ? 'DISABLED' : '');?>>
-		</form>
-	</div>
+<br><br>
+<input type="submit" name="button" value="OK" <?php echo ($DISABLE ? 'DISABLED' : '');?>>
+</form>
+</div>
 </div>
 <?php
 }
@@ -1886,7 +1863,7 @@ break;
 ======================================================================================================*/
 
 /**************
-* Add a played season to player %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+* NOTE Add a played season to player COACH FUNTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 **************/
 
 
@@ -1909,15 +1886,15 @@ objsort($players, array('+nr'));
 ?>
 				</select>
 				<br><br>
-				<input type="radio" CHECKED name="sign" value="+">+
-				<input type="radio" name="sign" value="-">-
-				<input type='text' name='amount' maxlength="5" size="5"> Add a Season?
+				<input type="checkbox" UNCHECKED name="sign" value="+">+
+				<!-- <input type="radio" name="sign" value="-">- -->
+				<input type='text' name='amount' maxlength="1" size="1"> Add a Season?
 				<input type="hidden" name="type" value="s_played">
 				<?php
 break;
 
 /***************
-* Player wants to Retire %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+* NOTE Player wants to Retire COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 **************/
 
 case 'want2retire':

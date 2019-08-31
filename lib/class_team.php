@@ -25,7 +25,7 @@ class Team
     public $imported          = false;
     public $is_retired        = 0;
     public $value = 0; public $tv = 0; # Identical.
-    public $ff_bought = 0;
+    public $ff_bought = 0; # Required to pull data from new columns for teams
 
     // MySQL stored initials for imported teams
     public $won_0    = 0;
@@ -247,6 +247,8 @@ class Team
         }
     }
     
+    
+    // NOTE Delta for won Fan Factor ff %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     public function dffactor($delta) {
     /*
     * Add a delta to team's won Fan Factor. For Redraft Purposes
@@ -260,7 +262,7 @@ class Team
         }   
     }
     
-    // Seasons Played and Wants to Retire %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // NOTE Increment Seasons Played COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
      
     public function incr_splayed($delta) {
     /*
@@ -275,17 +277,19 @@ class Team
         }   
     }
     
-    public function flag_w2retire($bool) {
+	// NOTE Set Wants to Retire COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    public function set_w2retire($text) {
     /*
     * Set player wants to retire flag
     */
-        return mysql_query("UPDATE players SET wants_retire = ".(($bool) ? 1 : 0)." WHERE player_id = $this->player_id");
-    }
-    
-    // End Seasons Played and Wants to Retire %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    
-    
+        $query = "UPDATE players SET wants_retire = ('Yes') WHERE player_id = $this->player_id";
+        if (mysql_query($query)) {
+        $this->wants_retire = $text;
+        return true;
+        } else {
+        return false;
+        }  
+    }    
 
 	public function setff_bought($integer) {
         /**

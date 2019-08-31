@@ -47,10 +47,11 @@ class Player
     public $may_buy_new_skill = 0;
     public $value = 0;
     public $date_died = '';
-    // Adding seasons played and wants to retire
+    // Adding seasons played and wants to retire. Required to select data from new columns
     // Sets default value for display
     public $seasons_played = 0;
     public $wants_retire = 0;
+    public $incentive = 0;
 
     // Characteristics
     public $ma = 0;
@@ -377,15 +378,15 @@ class Player
     }
     
     
-    // Increment player seasons played %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // NOTE Increment player seasons played COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     public function incr_splayed($delta) {
         $query = "UPDATE players SET seasons_played = IF(seasons_played IS NULL, $delta, seasons_played + ($delta)) WHERE player_id = $this->player_id";
         return mysql_query($query);
     }
     
-     // Set retirement desire flag %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    public function flag_wantRetire($delta) {
+     // NOTE Set retirement desire flag COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    public function flag_wantRetire($texts) {
         $query = "UPDATE players SET wants_retire = 'Yes' WHERE player_id = $this->player_id";
         return mysql_query($query);
     }
