@@ -247,7 +247,6 @@ class Team
         }
     }
     
-    
     // NOTE Delta for won Fan Factor ff ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     public function dffactor($delta) {
     /*
