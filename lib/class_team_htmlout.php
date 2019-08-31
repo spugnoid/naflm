@@ -188,9 +188,13 @@ case 'drop_goods':      status($team->drop($_POST['thing'])); break;
 case 'ready_state':     status($team->setReady(isset($_POST['bool']))); break;
 
 // NOTE Add case for incrementing seasons played
-case 's_played':        status($p->incr_splayed(($_POST['incr'] == '+' ? 1 : -1) )); break;
+case 's_played':        status($p->incr_splayed(($_POST['incr'] == '+' ? 1 : -1) )); 
+						status($p->calc_incentive(($_POST['math']) ));
+						break;
 // NOTE Add case for flagging player wants to retire
-case 'want2retire':     status($p->flag_wantRetire(($_POST['flag'] == '+' ? 1 : -1) )); break;	
+case 'want2retire':     status($p->flag_wantRetire(($_POST['flag'] == '+' ? 1 : -1) ));
+						status($p->calc_incentive(($_POST['math']) ));
+						break;	
 
 case 'retire':          status(isset($_POST['bool']) && $team->setRetired(true)); break;
 case 'delete':          status(isset($_POST['bool']) && $team->delete()); break;

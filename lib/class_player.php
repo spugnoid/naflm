@@ -381,30 +381,20 @@ class Player
     // NOTE Increment player seasons played COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     public function incr_splayed($delta) {
-		
         $query = "UPDATE players SET seasons_played = IF(seasons_played IS NULL, $delta, seasons_played + ($delta)) WHERE player_id = $this->player_id";
-        #return mysql_query($query);
-		
-		// TEST
-		$query = "UPDATE players SET incentive=seasons_played*20000 WHERE player_id = $this->player_id";
-		// end TEST
-		
+        return mysql_query($query);
+    }
+    
+     // NOTE Set retirement desire flag COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    public function flag_wantRetire($text) {
+        $query = "UPDATE players SET wants_retire = 'Yes' WHERE player_id = $this->player_id";
 		 return mysql_query($query);
     }
 	
-	
-    
-     // NOTE Set retirement desire flag COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    public function flag_wantRetire($texts) {
-        $query = "UPDATE players SET wants_retire = 'Yes' WHERE player_id = $this->player_id";
-       #return mysql_query($query);
-		
-		// TEST
-		$query = "UPDATE players SET incentive=seasons_played*20000 WHERE player_id = $this->player_id";
-		// end TEST
-		
-		 #return mysql_query($query);
-		
+	// NOTE Calculate incentive COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	 public function calc_incentive($math) {
+		$query = "UPDATE players SET incentive = seasons_played * 20 WHERE player_id = $this->player_id";
+		 return mysql_query($query);
     }
 
     public function dval($val = 0) {
