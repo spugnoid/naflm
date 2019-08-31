@@ -353,6 +353,8 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                     <ff>Manage team fan factor</ff>
                     <removeNiggle>Remove player niggle</removeNiggle>
                     <dff>Redraft FF Change</dff>
+					<xdsp>Adjust Seasons Played</xdsp>
+					<xur>Unflag Player Wants to Retire</xur>
 
                     <desc>
                         <unhire_journeyman> <![CDATA[ Regret permanently hiring a journeyman.<br> This only works on players from a 0-16 allowed position on your team's roster. ]]> </unhire_journeyman>
@@ -367,6 +369,8 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                         <ach_skills> <![CDATA[ Remove a players achieved skills. This makes the player able to rechoose a skill. ]]> </ach_skills>
                         <ff> <![CDATA[ Make changes to team's fan factor .]]> </ff>
                         <removeNiggle> <![CDATA[ Remove one of a players niggling injuries.]]> </removeNiggle>
+						<xdsp> <![CDATA[ Adjust Number of Seasons Played. ]]> </xdsp>
+						<xur> <![CDATA[ Unflag a Player Who Wants to Retire. ]]> </xur>
                     </desc>
                 </box_admin>
             </team>

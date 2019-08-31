@@ -248,7 +248,7 @@ class Team
     }
     
     
-    // NOTE Delta for won Fan Factor ff %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // NOTE Delta for won Fan Factor ff ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     public function dffactor($delta) {
     /*
     * Add a delta to team's won Fan Factor. For Redraft Purposes

@@ -261,7 +261,7 @@ SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team
 break;
 case 'removeNiggle': status($p->removeNiggle()); break;
 
-// NOTE My addition to add won FF delta
+// NOTE won FF delta ADMIN FUNCTION
 case 'dff':
 status($team->dffactor($dff = ($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']));
 if (Module::isRegistered('LogSubSys')) {
@@ -269,6 +269,16 @@ Module::run('LogSubSys', array('createEntry', T_LOG_FF, $coach->coach_id, "Coach
 }
 SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team->team_id));
 break;    
+		
+// NOTE delta to Seasons Player ADMIN FUNCTION
+case 'xdsp': status($p->xdsp(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']));
+		status($p->calc_incentive(($_POST['math']) )); break;
+			
+
+// NOTE Un-wantToRetire a player ADMIN FUNCTION
+case 'xur': status($p->xur(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount'])); 
+		status($p->calc_incentive(($_POST['math']) )); break; 
+			
 
 }
 }
@@ -1227,6 +1237,9 @@ $admin_tools = array(
 'ff'                => $lng->getTrn($base.'/box_admin/ff'),
 'removeNiggle'      => $lng->getTrn($base.'/box_admin/removeNiggle'),
 'dff'               => $lng->getTrn($base.'/box_admin/dff'),
+'xdsp'              => $lng->getTrn($base.'/box_admin/xdsp'),
+'xur'              	=> $lng->getTrn($base.'/box_admin/xur'),
+	
 );
 // Set default choice.
 if (!isset($_POST['menu_admintools'])) {
@@ -1520,9 +1533,53 @@ echo $lng->getTrn('profile/team/box_admin/desc/dff');
 			<?php
 break;
 
-/*
-* NOTE need to add seasons played and want to retire here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-*/
+/***************
+* NOTE Adjust player Seasons Played ADMIN FUNCTION
+**************/
+case 'xdsp':
+echo $lng->getTrn('profile/team/box_admin/desc/xdsp');
+?>
+			<hr><br>
+			<?php echo $lng->getTrn('common/player');?>:<br>
+			<select name="player">
+				<?php
+$DISABLE = true;
+objsort($players, array('+is_dead', '+name'));
+foreach ($players as $p) {
+if (!$p->is_sold) {
+echo "<option value='$p->player_id'".(($p->is_dead) ? ' style="background-color:'.COLOR_HTML_DEAD.';"' : '').">$p->nr $p->name</option>";
+$DISABLE = false;
+}
+}
+objsort($players, array('+nr'));
+?>
+			</select>
+			<br><br>
+			<input type="radio" CHECKED name="sign" value="+">+
+			<input type="radio" name="sign" value="-">-
+			<input type='text' name='amount' maxlength="5" size="5"> &Delta; Seasons Played
+			<input type="hidden" name="type" value="xdsp">
+			<?php
+break;
+
+		/***************
+* NOTE Unflag Player Wants to Retire ADMIN FUNCTION
+
+need to select player first!
+**************/
+case 'xur':
+echo $lng->getTrn('profile/team/box_admin/desc/xur');
+?>
+			<hr><br>
+			Unflag Player Wants to Retire:<br>
+			<input type="radio" CHECKED name="sign" value="+">+
+			<input type="radio" name="sign" value="-">-
+			<input type='text' name="amount" maxlength=1 size=1>
+			<input type="hidden" name="type" value="xur">
+			<?php
+break;
+
+		
 
 }
 ?>
