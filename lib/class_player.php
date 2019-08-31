@@ -50,7 +50,7 @@ class Player
     // Adding seasons played and wants to retire. Required to select data from new columns
     // Sets default value for display. NOTE Also need to add new columns to mysql.php
     public $seasons_played = 0;
-    public $wants_retire = 0; 
+    public $wants_retire = 'No'; # TEST Might not work for initial value
     public $incentive = 0;
 
     // Characteristics
