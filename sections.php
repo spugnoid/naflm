@@ -513,7 +513,7 @@ function sec_main() {
         <br>
         Bloodquest, Blood Bowl, the Blood Bowl logo, The Blood Bowl Spike Device, Chaos, the Chaos device, the Chaos logo, Games Workshop, Games Workshop logo, Nurgle, the Nurgle device, Skaven, Tomb Kings, and all associated marks, names, races, race insignia, characters, vehicles, locations, units, illustrations and images from the Blood Bowl game, the Warhammer world are either (R), TM and/or (C) Games Workshop Ltd 2000-2006, variably registered in the UK and other countries around the world. Used without permission. No challenge to their status intended. All Rights Reserved to their respective owners.
         <br>
-        FUMBBL icons are used with permission.  See 'about OBBLM' for credits.
+        FUMBBL icons are used with permission.  See 'about NAFLM' for credits.
     </div>
     <?php
 }
@@ -772,17 +772,16 @@ function sec_rules() {
 
 function sec_about() {
     global $lng, $credits;
-    title("About OBBLM");
+    title("About NAFLM");
     HTMLOUT::dnt();
     ?>
     <br>
     <p>
-        <b>OBBLM version <?php echo OBBLM_VERSION; ?></b><br><br>
+        <b>NAFLM version <?php echo NAFLM_VERSION; ?></b><br><br>
         Online Blood Bowl League Manager is an online game management system for Game Workshop's board game Blood Bowl.<br>
         <br>
         The authors of this program are
         <ul>
-            <li> <a href="mailto:nicholas.rathmann@gmail.com">Nicholas Mossor Rathmann</a>
             <li> <a href="http://www.mercuryvps.com">William Leonard</a>
             <li> Niels Orsleff Justesen</a>
         </ul>
@@ -797,7 +796,7 @@ function sec_about() {
         </ul>
         <br><br>With special thanks to Scott Bartel, Tom "Hutchinsfairy" and Michael Franchetti.
         <br><br>
-        OBBLM consists of valid HTML 4.01 transitional document type pages.
+        NAFLM consists of valid HTML 4.01 transitional document type pages.
         <br><br>
         <img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional" height="31" width="88">
         <br><br>
@@ -811,15 +810,6 @@ function sec_about() {
         echo implode(', ', $mods);
         ?>
     </p>
-
-    <?php
-    title("OBBLM Hosting");
-    echo 'Please visit <a href="http://www.mercuryvps.com">Mercury VPS</a> and click on the OBBLM tab to get started.';
-
-    title("Documentation");
-    echo "See the <a TARGET='_blank' href='".DOC_URL."'>OBBLM documentation wiki</a>";
-
-    ?>
 
     <?php title("Disclaimer");?>
     <p>
@@ -838,17 +828,17 @@ function sec_about() {
     <p>
         Copyright (c) Niels Orsleff Justesen and Nicholas Mossor Rathmann 2007-2011. All Rights Reserved.
         <br><br>
-        OBBLM is free software; you can redistribute it and/or modify
+        NAFLM is free software; you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
         the Free Software Foundation; either version 3 of the License, or
         (at your option) any later version.
         <br><br>
-        OBBLM is distributed in the hope that it will be useful,
+        NAFLM is distributed in the hope that it will be useful,
         but WITHOUT ANY WARRANTY; without even the implied warranty of
         MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
         GNU General Public License for more details.
         <br><br>
-        NAFLM is a fork of the original OBBLM programme and inherits all license and copyrights of the original.
+        NAFLM is a fork of the original NAFLM programme and inherits all license and copyrights of the original.
         <br><br>
         You should have received a copy of the GNU General Public License
         along with this program.  If not, see http://www.gnu.org/licenses/.
@@ -869,7 +859,7 @@ function sec_requestleague() {
     if(isset($_POST['requesting_league'])) {
         $to = Email::getAdministratorEmails();
         echo 'asdf' . $to . 'qwer';
-        $subject = 'Request to create a league on TheNAF OBBLM.';
+        $subject = 'Request to create a league on TheNAF NAFLM.';
         $message = 'Commissioner Username: ' . $coach->name .
             '\n Full League Name: ' . $_POST['full_league_name'] .
             '\n Short League Name: ' . $_POST['short_league_name'] .
