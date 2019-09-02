@@ -4,10 +4,10 @@
  *  Login
  *************************/
 function getFormAction($params) {
-    $mobilePrefix =(strpos($params, '?') !== FALSE) ? '&' : '?';    
+    $mobilePrefix =(strpos($params, '?') !== FALSE) ? '&' : '?';
     return 'index.php' . $params . (Mobile::isMobile() ? ($mobilePrefix . 'mobile=1') : '');
 }
- 
+
 function sec_login() {
     global $lng, $settings;
     $_URL_forgotpass = "index.php?section=login&amp;forgotpass=1";
@@ -54,8 +54,8 @@ function sec_login() {
                 </form>
                 </div>
             </div>
-            <?php 
-        }       
+            <?php
+        }
     } else {
         title($lng->getTrn('menu/login'));
         ?>
@@ -84,7 +84,7 @@ function sec_login() {
             if(!Mobile::isMobile()) {
                 if (Module::isRegistered('Registration') && $settings['allow_registration']) {
                     echo "<a href='handler.php?type=registration'><b>Register</b></a>";
-                }  
+                }
                 echo "<br><br>";
                 echo "<a href='$_URL_forgotpass'><b>".$lng->getTrn('login/forgotpass').'</b></a>';
             }
@@ -103,7 +103,7 @@ function sec_main() {
     MTS('Main start');
     list($sel_lid, $HTML_LeagueSelector) = HTMLOUT::simpleLeagueSelector();
     $IS_GLOBAL_ADMIN = (is_object($coach) && $coach->ring == Coach::T_RING_GLOBAL_ADMIN);
-    
+
     /*
      *  Was any main board actions made?
      */
@@ -117,11 +117,11 @@ function sec_main() {
         switch ($_POST['type'])
         {
             case 'msgdel': status($msg->delete()); break;
-            case 'msgnew':  
+            case 'msgnew':
                 status(Message::create(array(
-                    'f_coach_id' => $coach->coach_id, 
-                    'f_lid'      => ($IS_GLOBAL_ADMIN && isset($_POST['BC']) && $_POST['BC']) ? Message::T_BROADCAST : $sel_lid, 
-                    'title'      => $_POST['title'], 
+                    'f_coach_id' => $coach->coach_id,
+                    'f_lid'      => ($IS_GLOBAL_ADMIN && isset($_POST['BC']) && $_POST['BC']) ? Message::T_BROADCAST : $sel_lid,
+                    'title'      => $_POST['title'],
                     'msg'        => $_POST['txt'])
                 )); break;
             case 'msgedit': status($msg->edit($_POST['title'], $_POST['txt'])); break;
@@ -159,7 +159,7 @@ function sec_main() {
                 <form method="POST">
                     <textarea name="title" rows="1" cols="50"><?php echo $lng->getTrn('common/notitle');?></textarea><br><br>
                     <textarea name="txt" rows="15" cols="50"><?php echo $lng->getTrn('common/nobody');?></textarea><br><br>
-                    <?php 
+                    <?php
                     if ($IS_GLOBAL_ADMIN) {
                         echo $lng->getTrn('main/broadcast');
                         ?><input type="checkbox" name="BC"><br><br><?php
@@ -200,7 +200,7 @@ function sec_main() {
                       </script>";
                     echo "<br><hr>\n";
                     echo "<table class='boxTable'><tr>\n";
-                        switch ($e->type) 
+                        switch ($e->type)
                         {
                             case T_TEXT_MATCH_SUMMARY:
                                 echo "<td align='left' width='100%'>".$lng->getTrn('main/posted')." ".textdate($e->date)." " . ((isset($e->date_mod) && $e->date_mod != $e->date) ? "(".$lng->getTrn('main/lastedit')." ".textdate($e->date_mod).") " : '') .$lng->getTrn('main/by')." $e->author</td>\n";
@@ -249,15 +249,15 @@ function sec_main() {
     </div>
     <?php
     MTS('Board messages generated');
-    
+
     /*
         The right hand side column optionally (depending on settings) contains standings, latest game results, touchdown and casualties stats.
         We will now generate the stats, so that they are ready to be printed in correct order.
     */
-    
+
     echo "<div class='main_rightColumn'>\n";
     $boxes_all = array_merge($settings['fp_standings'], $settings['fp_leaders'], $settings['fp_events'], $settings['fp_latestgames']);
-    usort($boxes_all, create_function('$a,$b', 'return (($a["box_ID"] > $b["box_ID"]) ? 1 : (($a["box_ID"] < $b["box_ID"]) ? -1 : 0) );')); 
+    usort($boxes_all, create_function('$a,$b', 'return (($a["box_ID"] > $b["box_ID"]) ? 1 : (($a["box_ID"] < $b["box_ID"]) ? -1 : 0) );'));
     $boxes = array();
     foreach ($boxes_all as $box) {
         # These fields distinguishes the box types.
@@ -279,12 +279,12 @@ function sec_main() {
     global $core_tables, $ES_fields;
     $_MV_COLS = array_merge(array_keys($core_tables['mv_teams']), array_keys($ES_fields));
     $_MV_RG_INTERSECT = array_intersect(array_keys($core_tables['teams']), array_keys($core_tables['mv_teams']));
-    
+
     // Let's print those boxes!
     foreach ($boxes as $box) {
-    
+
     switch ($box['dispType']) {
-        
+
         case 'standings':
             $_BAD_COLS = array(); # Halt on these columns/fields.
             switch ($box['type']) {
@@ -295,8 +295,8 @@ function sec_main() {
                     $tour = new Tour($box['id']);
                     $SR = array_map(create_function('$val', 'return $val[0]."mv_".substr($val,1);'), $tour->getRSSortRule());
                     break;
-                    
-                case T_NODE_DIVISION: 
+
+                case T_NODE_DIVISION:
                     $_BAD_COLS = array('elo', 'swon', 'slost', 'sdraw', 'win_pct'); # Divisions do not have pre-calculated, MV, values of these fields.
                     // Fall through!
                 case T_NODE_LEAGUE:
@@ -312,7 +312,7 @@ function sec_main() {
                             $f = $f[0]."rg_".substr($f,1);
                         }
                         else {
-                            $f = $f[0]."mv_".substr($f,1);                            
+                            $f = $f[0]."mv_".substr($f,1);
                         }
                     }
                     break;
@@ -354,20 +354,20 @@ function sec_main() {
                     if (isset($box['infocus']) && $box['infocus']) {
                         echo "<hr>";
                         _infocus($teams);
-                    }                    
+                    }
                     ?>
                 </div>
             </div>
             <?php
             MTS('Standings table generated');
             break;
-            
+
         case 'latestgames':
-    
+
             if ($box['length'] <= 0) {
                 break;
             }
-            $upcoming = isset($box['upcoming']) ? $box['upcoming'] : false;  
+            $upcoming = isset($box['upcoming']) ? $box['upcoming'] : false;
            ?>
           <div class="boxWide">
               <h3 class='boxTitle<?php echo T_HTMLBOX_MATCH;?>'><?php echo $box['title'];?></h3>
@@ -383,7 +383,7 @@ function sec_main() {
                           <td> </td>
                       </tr>
                         <?php
-                        list($matches,$pages) = Match::getMatches(array(1, $box['length']), $box['type'], $box['id'], $upcoming); 
+                        list($matches,$pages) = Match::getMatches(array(1, $box['length']), $box['type'], $box['id'], $upcoming);
                         foreach ($matches as $m) {
                             echo "<tr valign='top'>\n";
                             $t1name = ($settings['fp_links']) ? "<a href='".urlcompile(T_URL_PROFILE,T_OBJ_TEAM,$m->team1_id,false,false)."'>$m->team1_name</a>" : $m->team1_name;
@@ -401,16 +401,16 @@ function sec_main() {
                             echo "<td><a href='index.php?section=matches&amp;type=report&amp;mid=$m->match_id'>Show</a></td>";
                             echo "</tr>";
                         }
-                        ?>  
+                        ?>
                     </table>
                 </div>
             </div>
             <?php
             MTS('Latest matches table generated');
             break;
-    
+
         case 'leaders':
-        
+
             $f = 'mv_'.$box['field'];
             list($players, ) = Stats::getRaw(T_OBJ_PLAYER, array($box['type'] => $box['id']), array(1, $box['length']), array('-'.$f), false)
             ?>
@@ -420,7 +420,7 @@ function sec_main() {
                     <table class="boxTable">
                         <tr>
                             <td><i><?php echo $lng->getTrn('common/name');?></i></td>
-                            <?php 
+                            <?php
                             if ($box['show_team']) {
                                 ?><td><i><?php echo $lng->getTrn('common/team');?></i></td><?php
                             }
@@ -446,7 +446,7 @@ function sec_main() {
             <?php
             MTS('Leaders standings generated');
             break;
-            
+
         case 'events':
             $events = _events($box['content'], $box['type'], $box['id'], $box['length']);
             ?>
@@ -468,23 +468,23 @@ function sec_main() {
                                     case 'date':
                                         $e->$col = str_replace(' ', '&nbsp;', textdate($e->$col,true));
                                         break;
-                                    case 'name': 
+                                    case 'name':
                                         if ($settings['fp_links'])
                                             $e->$col = "<a href='".urlcompile(T_URL_PROFILE,T_OBJ_PLAYER,$e->pid,false,false)."'>".$e->$col."</a>";
                                         break;
-                                    case 'tname': 
+                                    case 'tname':
                                         if ($settings['fp_links'])
                                             $e->$col = "<a href='".urlcompile(T_URL_PROFILE,T_OBJ_TEAM,$e->f_tid,false,false)."'>".$e->$col."</a>";
                                         break;
-                                    case 'rname': 
+                                    case 'rname':
                                         if ($settings['fp_links'])
                                             $e->$col = "<a href='".urlcompile(T_URL_PROFILE,T_OBJ_RACE,$e->f_rid,false,false)."'>".$e->$col."</a>";
                                         break;
-                                    case 'f_pos_name': 
+                                    case 'f_pos_name':
                                         if ($settings['fp_links'])
                                             $e->$col = "<a href='".urlcompile(T_URL_PROFILE,T_OBJ_RACE,$e->f_rid,false,false)."'>".$e->$col."</a>";
                                         break;
-                                    case 'value': 
+                                    case 'value':
                                             $e->$col = $e->$col/1000 . 'k';
                                         break;
                                 }
@@ -508,7 +508,7 @@ function sec_main() {
         HTMLOUT::dnt();
         ?>
         <br>
-        <a TARGET="_blank" href="http://nicholasmr.dk/index.php?sec=obblm">OBBLM official website</a><br><br>
+        <a TARGET="_blank" href="https://www.thenaf.net/2016/06/naflm-official-release-1-0/">NAFLM website</a><br><br>
         This web site is completely unofficial and in no way endorsed by Games Workshop Limited.
         <br>
         Bloodquest, Blood Bowl, the Blood Bowl logo, The Blood Bowl Spike Device, Chaos, the Chaos device, the Chaos logo, Games Workshop, Games Workshop logo, Nurgle, the Nurgle device, Skaven, Tomb Kings, and all associated marks, names, races, race insignia, characters, vehicles, locations, units, illustrations and images from the Blood Bowl game, the Warhammer world are either (R), TM and/or (C) Games Workshop Ltd 2000-2006, variably registered in the UK and other countries around the world. Used without permission. No challenge to their status intended. All Rights Reserved to their respective owners.
@@ -520,7 +520,7 @@ function sec_main() {
 
 $_INFOCUSCNT = 1; # HTML ID for _infocus()
 function _infocus($teams) {
-    
+
     //Create a new array of teams to display
     $ids = array();
     foreach ($teams as $team) {
@@ -635,8 +635,8 @@ function _infocus($teams) {
         </div>
     </div>
     <script>
-    /* 
-     * This script creates a slideshow of all <div>s in the "inFocusContent" div 
+    /*
+     * This script creates a slideshow of all <div>s in the "inFocusContent" div
      * Based on an example by Jon Raasch:
      * http://jonraasch.com/blog/a-simple-jquery-slideshow
      */
@@ -662,7 +662,7 @@ function _infocus($teams) {
         setInterval( "nextContent<?php echo $_INFOCUSCNT;?>()", 5000 );
     });
     </script>
-    
+
     <?php
     $_INFOCUSCNT++;
 }
@@ -713,7 +713,7 @@ function sec_matcheshandler() {
         case 'recent':      Match_HTMLOUT::recentMatches(); break;
         case 'upcoming':    Match_HTMLOUT::upcomingMatches(); break;
         case 'usersched':   Match_HTMLOUT::userSched(); break;
-    }    
+    }
 }
 
 function sec_objhandler() {
@@ -724,8 +724,8 @@ function sec_objhandler() {
             {
                 case T_URL_STANDINGS:
                     call_user_func(
-                        array("${classPrefix}_HTMLOUT", 'standings'), 
-                        isset($_GET['node'])    ? (int) $_GET['node']    : false, 
+                        array("${classPrefix}_HTMLOUT", 'standings'),
+                        isset($_GET['node'])    ? (int) $_GET['node']    : false,
                         isset($_GET['node_id']) ? (int) $_GET['node_id'] : false
                     );
                     break;
@@ -812,13 +812,13 @@ function sec_about() {
         ?>
     </p>
 
-    <?php 
+    <?php
     title("OBBLM Hosting");
     echo 'Please visit <a href="http://www.mercuryvps.com">Mercury VPS</a> and click on the OBBLM tab to get started.';
-    
+
     title("Documentation");
     echo "See the <a TARGET='_blank' href='".DOC_URL."'>OBBLM documentation wiki</a>";
-    
+
     ?>
 
     <?php title("Disclaimer");?>
@@ -827,8 +827,8 @@ function sec_about() {
         <br><br>
         <b>This web site is completely unofficial and in no way endorsed by Games Workshop Limited.</b>
         <br><br>
-        Bloodquest, Blood Bowl, the Blood Bowl logo, The Blood Bowl Spike Device, Chaos, the Chaos device, the Chaos logo, Games Workshop, Games Workshop logo, Nurgle, the Nurgle device, Skaven, Tomb Kings, 
-        and all associated marks, names, races, race insignia, characters, vehicles, locations, units, illustrations and images from the Blood Bowl game, the Warhammer world are either ®, TM and/or © Games Workshop Ltd 2000-2006, 
+        Bloodquest, Blood Bowl, the Blood Bowl logo, The Blood Bowl Spike Device, Chaos, the Chaos device, the Chaos logo, Games Workshop, Games Workshop logo, Nurgle, the Nurgle device, Skaven, Tomb Kings,
+        and all associated marks, names, races, race insignia, characters, vehicles, locations, units, illustrations and images from the Blood Bowl game, the Warhammer world are either ®, TM and/or © Games Workshop Ltd 2000-2006,
         variably registered in the UK and other countries around the world. Used without permission. No challenge to their status intended. All Rights Reserved to their respective owners.
         <br><br>
         Fumbbl icons are used with permission.  Credits: harvestmouse, garion, christer, whatball.
@@ -858,14 +858,14 @@ function sec_about() {
 
 function sec_requestleague() {
     global $coach, $settings, $db_user, $db_passwd;
-    
+
     title("Request League");
-    
+
     if (!isset($_SESSION['logged_in'])) {
         echo 'You must <a href="handler.php?type=registration"><b>register</b></a> as a League Commissioner before you can request a league.';
         return;
     }
-    
+
     if(isset($_POST['requesting_league'])) {
         $to = Email::getAdministratorEmails();
         echo 'asdf' . $to . 'qwer';
