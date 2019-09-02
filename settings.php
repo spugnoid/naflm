@@ -13,13 +13,6 @@ $db_host   = 'localhost';
  * Global settings
  *************************/
 
-/*
-    For help visit
-        - http://www.nicholasmr.dk/obblmwiki/index.php?title=Customization#Global_settings
-        - http://www.nicholasmr.dk/obblmwiki/index.php?title=Setup
-
-    For LOCAL settings, ie. per league settings, edit the localsettings/settings_<LEAGUE ID>.php files.
-*/
 
 $settings['site_name'] = 'My NAFLM portal';                         // Site name.
 $settings['default_visitor_league'] = 1;                            // ID of default league to show on front page when not logged in OR coach has not selected a home league.
