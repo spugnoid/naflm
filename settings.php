@@ -1,7 +1,7 @@
 <?php
 
 /**************************
- * MySQL database settings 
+ * MySQL database settings
  **************************/
 
 $db_name   = 'obblmdb';
@@ -10,18 +10,18 @@ $db_passwd = '';
 $db_host   = 'localhost';
 
 /*************************
- * Global settings 
+ * Global settings
  *************************/
 
-/* 
-    For help visit 
+/*
+    For help visit
         - http://www.nicholasmr.dk/obblmwiki/index.php?title=Customization#Global_settings
         - http://www.nicholasmr.dk/obblmwiki/index.php?title=Setup
-        
+
     For LOCAL settings, ie. per league settings, edit the localsettings/settings_<LEAGUE ID>.php files.
 */
 
-$settings['site_name'] = 'My OBBLM portal';                         // Site name.
+$settings['site_name'] = 'My NAFLM portal';                         // Site name.
 $settings['default_visitor_league'] = 1;                            // ID of default league to show on front page when not logged in OR coach has not selected a home league.
 $settings['default_leagues'] = array();                             // When creating a coach the coach will automatically become a regular coach in leagues with these IDs.
 $settings['hide_ES_extensions'] = false;                            // Default is false. Hides ES (Extra Stats) tables and ES references.
@@ -47,8 +47,8 @@ $settings['custom_races'] = array(
  * House ranking systems
  *****************/
 
-/* 
-    Please visit 
+/*
+    Please visit
         - http://www.nicholasmr.dk/obblmwiki/index.php?title=Customization#Global_settings
     before you edit the below settings.
 */
