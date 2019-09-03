@@ -5,7 +5,7 @@
  *************************/
 preg_match('/settings_(.*?)\.php/', __FILE__, $match);
 $get_lid = $match[1];
-$settings['stylesheet'] = 1; 
+$settings['stylesheet'] = 1;
 $settings['lang']            = 'en-GB';
 
 /*********************
@@ -14,19 +14,19 @@ $settings['lang']            = 'en-GB';
 // Change the Title after the = sign.  Do not change things before the = sign.
 $settings['banner_subtitle'] = 'New here?  Visit theNAF.net/Leagues for more information';
 // Button text for league URL.
-$settings['league_url_name'] = 'League Forum'; 
-// Stylesheet for text etc. Currently stylesheet 1 is the only existing stylesheet, so don't change it!  
-// Default language. Existing: en-GB, es-ES, de-DE, fr-FR, it-IT. 
-// Default is true. Generate coach, team and player links on the front page?       
+$settings['league_url_name'] = 'League Forum';
+// Stylesheet for text etc. Currently stylesheet 1 is the only existing stylesheet, so don't change it!
+// Default language. Existing: en-GB, es-ES, de-DE, fr-FR, it-IT.
+// Default is true. Generate coach, team and player links on the front page?
 $settings['fp_links']        = true;
-$settings['league_name']     = get_alt_col('league_prefs','f_lid',$get_lid,'league_name'); 
+$settings['league_name']     = get_alt_col('league_prefs','f_lid',$get_lid,'league_name');
 $settings['banner_title']    = get_alt_col('league_prefs','f_lid',$get_lid,'league_name');
 // URL of league home page, if you have one. If not then leave this empty, that is = '' (two quotes only), which will disable the button.
-$settings['league_url']      = get_alt_col('league_prefs','f_lid',$get_lid,'forum_url');    
-// The welcome text appears below the title.           
-$settings['welcome']         = get_alt_col('league_prefs','f_lid',$get_lid,'welcome'); 
+$settings['league_url']      = get_alt_col('league_prefs','f_lid',$get_lid,'forum_url');
+// The welcome text appears below the title.
+$settings['welcome']         = get_alt_col('league_prefs','f_lid',$get_lid,'welcome');
 // The next text appears when you click the rules button.
-$settings['rules']           = get_alt_col('league_prefs','f_lid',$get_lid,'rules'); 
+$settings['rules']           = get_alt_col('league_prefs','f_lid',$get_lid,'rules');
 $get_prime = get_alt_col('league_prefs','f_lid',$get_lid,'prime_tid');
 $get_second = get_alt_col('league_prefs','f_lid',$get_lid,'second_tid');
 // Keep the following the same.
@@ -80,7 +80,7 @@ $rules['initial_team_treasury'] = array(	//	0			=>	1000000,	// Amazon
 											//	24			=>	1000000,	// Bretonnia
 											//	25			=>	1000000,	// Daemons of Khorne
 											//	26			=>	1000000,	// Apes of Wrath
-										);	
+										);
 
 /*********************
  *   Standings pages
@@ -131,9 +131,9 @@ $settings['fp_standings'] = array(
 		'box_ID' 	=> 	1,
 		'type' 		=> 	'tournament',
 		'infocus' 	=> 	true,
-		'HRS' 		=> 	get_alt_col('tours','tour_id',$get_prime,'rs'), 
+		'HRS' 		=> 	get_alt_col('tours','tour_id',$get_prime,'rs'),
 		'title' 	=> 	get_alt_col('tours','tour_id',$get_prime,'name'),
-		'length' 	=> 	40, 
+		'length' 	=> 	40,
 		'fields' 	=> 	array(	'Name'	=> 'name',
 								'PTS'  	=> 'pts',
 								'TV'	=> 'tv',
@@ -143,6 +143,9 @@ $settings['fp_standings'] = array(
 								'D'		=> 'draw',
 								'GF'	=> 'gf',
 								'GA'	=> 'ga',
+								'GP'	=> 'played',
+								'TDCAS'=> 'tdcas'
+
 						),
 	),
 );

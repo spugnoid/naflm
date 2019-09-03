@@ -188,13 +188,13 @@ case 'drop_goods':      status($team->drop($_POST['thing'])); break;
 case 'ready_state':     status($team->setReady(isset($_POST['bool']))); break;
 
 // NOTE Add case for incrementing seasons played
-case 's_played':        status($p->incr_splayed(($_POST['incr'] == '+' ? 1 : -1) )); 
+case 's_played':        status($p->incr_splayed(($_POST['incr'] == '+' ? 1 : -1) ));
 						status($p->calc_incentive(($_POST['math']) ));
 						break;
 // NOTE Add case for flagging player wants to retire
 case 'want2retire':     status($p->flag_wantRetire(($_POST['flag'] == '+' ? 1 : -1) ));
 						status($p->calc_incentive(($_POST['math']) ));
-						break;	
+						break;
 
 case 'retire':          status(isset($_POST['bool']) && $team->setRetired(true)); break;
 case 'delete':          status(isset($_POST['bool']) && $team->delete()); break;
@@ -268,23 +268,23 @@ if (Module::isRegistered('LogSubSys')) {
 Module::run('LogSubSys', array('createEntry', T_LOG_FF, $coach->coach_id, "Coach '$coach->name' (ID=$coach->coach_id) added a won FF delta for team '$team->name' (ID=$team->team_id) of amount = $dff"));
 }
 SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team->team_id));
-break;    
-		
+break;
+
 // NOTE delta to Seasons Player ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 case 'xdsp': status($p->xdsp(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']));
-		status($p->calc_incentive(($_POST['math']) )); 
+		status($p->calc_incentive(($_POST['math']) ));
 if (Module::isRegistered('LogSubSys')) {
 Module::run('LogSubSys', array('createEntry', T_LOG_XDSP, $coach->coach_id, "Coach '$coach->name' (ID=$coach->coach_id) decremented a Season Played for player '$p->name' (ID=$p->player_id)"));
 }
 		break;
-			
+
 // NOTE Un-wantToRetire a player ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-case 'xur': status($p->xur(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount'])); 
-		status($p->unCalc_incentive(($_POST['math']) )); 
+case 'xur': status($p->xur(($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']));
+		status($p->unCalc_incentive(($_POST['math']) ));
 		if (Module::isRegistered('LogSubSys')) {
 Module::run('LogSubSys', array('createEntry', T_LOG_XUR, $coach->coach_id, "Coach '$coach->name' (ID=$coach->coach_id) unflagged Wants to Retire for '$p->name' (ID=$p->player_id)"));
 }
-break; 
+break;
 
 }
 }
@@ -332,7 +332,7 @@ Misc
 $p->name = preg_replace('/\s/', '&nbsp;', $p->name);
 $p->position = preg_replace('/\s/', '&nbsp;', $p->position);
 $p->info = '<i class="icon-info"></i>';
-$p->team_id = $team->team_id;	
+$p->team_id = $team->team_id;
 
 
 /*
@@ -370,7 +370,7 @@ elseif ($sub < -1)  $p->{"${chr}_color"} = COLOR_HTML_CHR_LTM1;
 if ($p->$chr != $p->{"${chr}_ua"}) {
 $p->{"${chr}_color"} = COLOR_HTML_CHR_BROKENLIMIT;
 $p->$chr = $p->{$chr.'_ua'}.' <i>('.$p->$chr.' eff.)</i>';
-}			
+}
 }
 /*
 New skills drop-down.
@@ -1216,6 +1216,23 @@ if (Module::isRegistered('FamousTeams')) {
 			<?php
 }
 ?>
+<tr>
+	<td colspan=2>
+		<hr>
+	</td>
+</tr>
+<tr>
+	<td><?php echo $lng->getTrn('common/played');?></td>
+	<td><?php echo $team->gp_this_seas; ?></td>
+</tr>
+<tr>
+	<td><?php echo $lng->getTrn('common/tdcas');?></td>
+	<td><?php echo $team->tdcas_this_seas; ?></td>
+</tr>
+<tr>
+	<td><?php echo $lng->getTrn('matches/report/treas')?></td>
+	<td><?php echo $team->redraft_cash/1000 . 'k'; ?></td>
+</tr>
 		</table>
 	</div>
 </div>
@@ -1245,7 +1262,7 @@ $admin_tools = array(
 'dff'               => $lng->getTrn($base.'/box_admin/dff'),
 'xdsp'              => $lng->getTrn($base.'/box_admin/xdsp'),
 'xur'              	=> $lng->getTrn($base.'/box_admin/xur'),
-	
+
 );
 // Set default choice.
 if (!isset($_POST['menu_admintools'])) {
@@ -1523,7 +1540,7 @@ $DISABLE = false;
 			<input type="hidden" name="type" value="removeNiggle">
 			<?php
 break;
-		
+
 /***************
 * NOTE Adjust FF for Redraft ADMIN FUNCTION
 **************/
@@ -1654,9 +1671,9 @@ $tmanage = array(
 'buy_goods'         => $lng->getTrn($base.'/box_tm/buy_goods'),
 'drop_goods'        => $lng->getTrn($base.'/box_tm/drop_goods'),
 'ready_state'       => $lng->getTrn($base.'/box_tm/ready_state'),
-// Add seasons played increment
+// NOTE Add seasons played increment
 's_played'			=> $lng->getTrn($base.'/box_tm/s_played'),
-// Add player wants to retire flag
+// NOTE Add player wants to retire flag
 'want2retire'          => $lng->getTrn($base.'/box_tm/want2retire'),
 'delete'            => $lng->getTrn($base.'/box_tm/delete'),
 );
@@ -1937,8 +1954,6 @@ break;
 /**************
 * NOTE Add a played season to player COACH FUNTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 **************/
-
-
 case 's_played':
 echo $lng->getTrn('profile/team/box_tm/desc/s_played');
 ?>
@@ -1957,7 +1972,7 @@ $DISABLE = false;
 objsort($players, array('+nr'));
 ?>
 				</select>
-				<br><br>												 
+				<br><br>
 				<input type="checkbox" UNCHECKED name="incr" value="+"> Add a Season?
 				<input type="hidden" name="type" value="s_played">
 				<?php
