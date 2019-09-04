@@ -652,7 +652,7 @@ class SQLCore
 			BEGIN
 				DECLARE won_0, draw_0, lost_0, played_0 SMALLINT UNSIGNED DEFAULT 0;
 				IF obj = '.T_OBJ_TEAM.' THEN
-					SELECT teams.won_0, teams.draw_0, teams.lost_0, teams.played_0 INTO won_0, draw_0, lost_0, played_0 FROM teams WHERE teams.team_id = obj_id;
+					SELECT teams.won_0, teams.draw_0, teams.lost_0, teams.played_0, INTO won_0, draw_0, lost_0, played_0 FROM teams WHERE teams.team_id = obj_id;
 					RETURN (SELECT winPct(SUM(won)+won_0,SUM(lost)+lost_0,SUM(draw)+draw_0,SUM(played)+played_0) FROM mv_teams WHERE f_tid = obj_id);
 				ELSEIF obj = '.T_OBJ_COACH.' THEN
 					RETURN (SELECT winPct(SUM(won),SUM(lost),SUM(draw),SUM(played)) FROM mv_coaches WHERE f_cid = obj_id);
@@ -680,7 +680,7 @@ class SQLCore
 			BEGIN
 				UPDATE mv_teams SET pts = getPTS(f_tid, f_trid);
 			END',
-			
+
 			/*
 			 *  Sync tour points (PTS)
 			 */
@@ -941,7 +941,7 @@ class SQLCore
 					SELECT cid, trid,did,lid, '.$common_es_fields.'
 					FROM match_data_es
 					WHERE match_data_es.f_cid = cid AND match_data_es.f_trid = trid;
-					
+
 				/* Empty MV entry? => Delete it */
 				SELECT mv_coaches.played INTO num_played FROM mv_coaches WHERE mv_coaches.f_cid = cid AND mv_coaches.f_trid = trid;
 				IF num_played = 0 THEN
@@ -959,7 +959,7 @@ class SQLCore
 			BEGIN
 				DECLARE did '.$CT_cols[T_NODE_DIVISION].' DEFAULT NULL;
 				DECLARE lid '.$CT_cols[T_NODE_LEAGUE].' DEFAULT NULL;
-				DECLARE num_played '.$mv_commoncols['played'].' DEFAULT 0;            
+				DECLARE num_played '.$mv_commoncols['played'].' DEFAULT 0;
 				CALL getTourParentNodes(trid, did, lid);
 
 				DELETE FROM mv_races WHERE f_rid = rid AND f_trid = trid;
@@ -1268,7 +1268,7 @@ class SQLCore
 			array("tbl" => "matches",       'name' => "idx_team1_id_team2_id", "idx" => "(team1_id,team2_id)"),
 			array("tbl" => "matches",       'name' => "idx_team2_id",          "idx" => "(team2_id)"),
 			array("tbl" => "tours",         'name' => "idx_winner",            "idx" => "(winner)"),
-                                            
+
 			array("tbl" => "match_data",    'name' => "idx_m",                 "idx" => "(f_match_id)"),
 			array("tbl" => "match_data",    'name' => "idx_tr",                "idx" => "(f_tour_id)"),
 			array("tbl" => "match_data",    'name' => "idx_p_m",               "idx" => "(f_player_id,f_match_id)"),
@@ -1279,7 +1279,7 @@ class SQLCore
 			array("tbl" => "match_data",    'name' => "idx_t_tr",              "idx" => "(f_team_id,  f_tour_id)"),
 			array("tbl" => "match_data",    'name' => "idx_r_tr",              "idx" => "(f_race_id,  f_tour_id)"),
 			array("tbl" => "match_data",    'name' => "idx_c_tr",              "idx" => "(f_coach_id, f_tour_id)"),
-                                                                             
+
 			array("tbl" => "match_data_es", 'name' => "idx_m",                 "idx" => "(f_mid)"),
 			array("tbl" => "match_data_es", 'name' => "idx_tr",                "idx" => "(f_trid)"),
 			array("tbl" => "match_data_es", 'name' => "idx_p_m",               "idx" => "(f_pid,f_mid)"),
@@ -1290,12 +1290,12 @@ class SQLCore
 			array("tbl" => "match_data_es", 'name' => "idx_t_tr",              "idx" => "(f_tid,f_trid)"),
 			array("tbl" => "match_data_es", 'name' => "idx_r_tr",              "idx" => "(f_rid,f_trid)"),
 			array("tbl" => "match_data_es", 'name' => "idx_c_tr",              "idx" => "(f_cid,f_trid)"),
-                                                                             
+
 			array('tbl' => 'mv_players',    'name' => 'idx_p_tr',              'idx' => '(f_pid,f_trid)'),
 			array('tbl' => 'mv_teams',      'name' => 'idx_t_tr',              'idx' => '(f_tid,f_trid)'),
 			array('tbl' => 'mv_coaches',    'name' => 'idx_p_tr',              'idx' => '(f_cid,f_trid)'),
 			array('tbl' => 'mv_races',      'name' => 'idx_r_tr',              'idx' => '(f_rid,f_trid)'),
-                                                                              
+
 			array('tbl' => 'mv_es_players', 'name' => 'idx_p_tr',              'idx' => '(f_pid,f_trid)'),
 			array('tbl' => 'mv_es_teams',   'name' => 'idx_t_tr',              'idx' => '(f_tid,f_trid)'),
 			array('tbl' => 'mv_es_coaches', 'name' => 'idx_p_tr',              'idx' => '(f_cid,f_trid)'),
