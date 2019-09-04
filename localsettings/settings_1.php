@@ -144,8 +144,6 @@ $settings['fp_standings'] = array(
 								'GF'	=> 'gf',
 								'GA'	=> 'ga',
 								'GP'	=> 'played',
-								'TDCAS'=> 'tdcas'
-
 						),
 	),
 );
