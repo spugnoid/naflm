@@ -26,9 +26,6 @@ class Team
     public $is_retired        = 0;
     public $value = 0; public $tv = 0; # Identical.
     public $ff_bought = 0; # Required to pull data from new columns for teams
-    public $gp_this_seas = 0; # track games played this season only
-    public $tdcas_this_seas = 0; # track tdcas this season Only
-    public $redraft_cash = 0; # track redraft cash based on games played and tdcas
 
     // MySQL stored initials for imported teams
     public $won_0    = 0;
