@@ -129,8 +129,8 @@ $core_tables = array(
         'seasons_played' => $CT_cols['seasons_played'].' DEFAULT 0', # REQUIRED for seasons played tracking
         'wants_retire' => $CT_cols['wants_retire'].' DEFAULT 0', # REQUIRED for retirement tracking
 		'incentive' => $CT_cols['incentive'].' DEFAULT 0', # REQUIRED for retirement tracking
-        
-        
+
+
     ),
     'memberships' => array(
         'cid'   => $CT_cols[T_OBJ_COACH].' NOT NULL',
@@ -1027,7 +1027,7 @@ function upgrade_database_to_version($toVersion, $fromVersion) {
     global $db_upgrade_options;
     require_once('lib/class_sqlcore.php');
     require_once('lib/mysql_upgrade_queries.php');
-    
+
     $reversedUpgradeSqls = array_reverse($upgradeSQLs, true);
     $upgrading = false;
     foreach($reversedUpgradeSqls as $versionNumber => $sqlList) {
@@ -1154,7 +1154,7 @@ class SQLUpgrade
         $row = mysql_fetch_row($result);
         return ((int) $row[0]) ? $query : self::NONE;
     }
-    
+
     public static function getCurrentDatabaseVersion() {
         if(!self::doesColExist('version', 'version'))
             return false;
@@ -1164,7 +1164,7 @@ class SQLUpgrade
         $row = mysql_fetch_row($result);
         return (int) $row[0];
     }
-    
+
     public static function updateDatabaseVersion($version) {
         // Drop table and create
         Table::createTable('version', array('version' => 'MEDIUMINT UNSIGNED NOT NULL'));
