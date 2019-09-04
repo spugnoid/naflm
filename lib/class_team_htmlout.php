@@ -1216,23 +1216,6 @@ if (Module::isRegistered('FamousTeams')) {
 			<?php
 }
 ?>
-<tr>
-	<td colspan=2>
-		<hr>
-	</td>
-</tr>
-<tr>
-	<td><?php echo $lng->getTrn('common/played');?></td>
-	<td><?php echo $team->gp_this_seas; ?></td>
-</tr>
-<tr>
-	<td><?php echo $lng->getTrn('common/tdcas');?></td>
-	<td><?php echo $team->tdcas_this_seas; ?></td>
-</tr>
-<tr>
-	<td><?php echo $lng->getTrn('matches/report/treas')?></td>
-	<td><?php echo $team->redraft_cash/1000 . 'k'; ?></td>
-</tr>
 		</table>
 	</div>
 </div>
