@@ -193,8 +193,10 @@ public static function showTables() {
 		$lng->getTrn('table-won', 'LeagueTables') => 'mv_won',
 		$lng->getTrn('table-draw', 'LeagueTables') => 'mv_draw',
 		$lng->getTrn('table-loss', 'LeagueTables')=> 'mv_lost',
-		$lng->getTrn('table-td', 'LeagueTables') => 'mv_sdiff',
-		$lng->getTrn('table-cas', 'LeagueTables') => 'mv_tcdiff',
+		//$lng->getTrn('table-td', 'LeagueTables') => 'mv_sdiff',
+		//$lng->getTrn('table-cas', 'LeagueTables') => 'mv_tcdiff',
+    $lng->getTrn('table-td', 'LeagueTables') => 'mv_td',
+		$lng->getTrn('table-cas', 'LeagueTables') => 'mv_cas',
 		$lng->getTrn('table-points', 'LeagueTables') => 'mv_pts',
 		);
 

@@ -79,7 +79,7 @@ class Team
         $query = "UPDATE teams SET owned_by_coach_id = $cid WHERE team_id = $this->team_id";
         return mysql_query($query) && ($this->owned_by_coach_id = $cid) && SQLTriggers::run(T_SQLTRIG_TEAM_UPDATE_CHILD_RELS, array('id' => $this->team_id, 'obj' => $this));
     } */
-    
+
     public function getPlayers() {
         $this->_players = array();
         $result = mysql_query("SELECT player_id FROM players WHERE owned_by_team_id = $this->team_id ORDER BY nr ASC, name ASC");
@@ -246,8 +246,7 @@ class Team
             return false;
         }
     }
-    
-    
+
     // NOTE Delta for won Fan Factor ff ADMIN FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     public function dffactor($delta) {
     /*
@@ -259,7 +258,7 @@ class Team
         return true;
         } else {
         return false;
-        }   
+        }
     }
 
 	public function setff_bought($integer) {
@@ -281,7 +280,7 @@ class Team
         $this->rdy = $bool;
         return true;
     }
-    
+
     public function isDeletable() {
         /**
          * Tests if a team is deletable (has not participated in any matches)
@@ -305,10 +304,10 @@ class Team
     }
 
     public function isPlayerBuyable($pos_id) {
-        /* 
-            Checks whether maximum number of allowed positionals is reached. 
+        /*
+            Checks whether maximum number of allowed positionals is reached.
         */
-        $query = "SELECT IFNULL(COUNT(*) < qty, TRUE) FROM players, game_data_players 
+        $query = "SELECT IFNULL(COUNT(*) < qty, TRUE) FROM players, game_data_players
             WHERE f_pos_id = pos_id AND owned_by_team_id = $this->team_id AND f_pos_id = $pos_id AND date_died IS NULL AND date_sold IS NULL";
         $result = mysql_query($query);
         $row = mysql_fetch_row($result);
@@ -325,11 +324,11 @@ class Team
         }
         return false;
     }
-    
+
     public function isPlayerNumberOccupied($nr) {
         return SQLBoolEval("SELECT COUNT(*) FROM players WHERE owned_by_team_id = $this->team_id AND nr = $nr AND date_sold IS NULL AND date_died IS NULL AND status != ".DEAD);
     }
-    
+
     public function isJMLimitReached() {
         global $rules;
         setupGlobalVars(T_SETUP_GLOBAL_VARS__LOAD_LEAGUE_SETTINGS, array('lid' => $this->f_lid)); // Load correct $rules for league.
@@ -349,7 +348,7 @@ class Team
         }
         return $tours;
     }
-    
+
     public function getFreePlayerNr() {
         global $T_ALLOWED_PLAYER_NR;
         $query = "SELECT GROUP_CONCAT(nr) FROM players WHERE owned_by_team_id = $this->team_id GROUP BY owned_by_team_id";
@@ -381,7 +380,7 @@ class Team
         list($retstatus, $error) = $img->save($name);
         return array($retstatus, $error);
     }
-    
+
     public function deleteLogo() {
         $img = new ImageSubSys(IMGTYPE_TEAMLOGO, $this->team_id);
         return $img->delete();
@@ -389,7 +388,7 @@ class Team
 
     public function deleteStadiumPic() {
         $img = new ImageSubSys(IMGTYPE_TEAMSTADIUM, $this->team_id);
-        return $img->delete();    
+        return $img->delete();
     }
 
     public function writeNews($txt) {
@@ -408,16 +407,16 @@ class Team
         $news = new TeamNews($news_id);
         return $news->edit($new_txt);
     }
-    
+
     // Run this after having imported THIS team.
     public function postImportSync() {
         return mysql_query("CALL match_sync(0,0,$this->team_id,$this->team_id,0)");
     }
-    
+
     public function allowEdit() {
         global $coach;
-        return is_object($coach) 
-            && ($this->owned_by_coach_id == $coach->coach_id || $coach->mayManageObj(T_OBJ_TEAM, $this->team_id)) 
+        return is_object($coach)
+            && ($this->owned_by_coach_id == $coach->coach_id || $coach->mayManageObj(T_OBJ_TEAM, $this->team_id))
             && !$this->is_retired;
     }
 
@@ -436,7 +435,7 @@ class Team
          **/
         $teams = array();
         $where = array();
-        if ($race_id !== false) { 
+        if ($race_id !== false) {
             $where[] = "f_race_id = $race_id";
         }
         if (!empty($f_lids)) {
