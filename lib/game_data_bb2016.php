@@ -5367,7 +5367,7 @@ $stars = array(
         'races' => array(T_RACE_LIZARDMAN),
     ),
     'Glotl Stop'                               => array(
-        'id'    => -104
+        'id'    => -104,
         'ma'    => 6,
         'st'    => 6,
         'ag'    => 1,
