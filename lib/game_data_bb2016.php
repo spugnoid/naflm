@@ -5378,7 +5378,6 @@ $stars = array(
         'icon'  => 'star',
         'races' => array(T_RACE_AMAZON, T_RACE_LIZARDMAN),
     ),
-
 );
 /*  Paired Stars  ***************************************************************************************** */
 $starpairs = array(
@@ -5745,6 +5744,6 @@ INDUCED STAR FORMAT----------------------------
 ),
 
 // !!!!  1233 is highest used position for ROSTERED STAR PLAYERS and Regular Players ==================================
-// !!!!  -100 is the highest used position for INDUCED STAR PLAYERS ================================
+// !!!!  -104 is the highest used position for INDUCED STAR PLAYERS ================================
 
  */
