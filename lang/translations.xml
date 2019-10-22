@@ -138,7 +138,7 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
             <notice_spp><![CDATA[<i>Note</i>: <b>If</b> star players could earn SPP they would have the amount correspondng to the SPP column.]]></notice_spp>
             <sortedagainst>Sorted against</sortedagainst>
             <confirm_box>Are you sure?</confirm_box>
-			      <incentive>Incentive</incentive>
+			<incentive>Incentive</incentive>
             <gp_this_seas>Season Games</gp_this_seas>
             <tdcas_this_seas>TDCAS This Season</tdcas_this_seas>
 
@@ -308,8 +308,7 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                     <ready_state>Set ready state</ready_state>
                     <!-- NOTE Add seasons played and want to retire here  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  -->
                     <s_played>Track Season Played</s_played>
-					          <want2retire>Player Wants to Retire</want2retire>
-
+					<want2retire>Player Wants to Retire</want2retire>
                     <retire>Retire team</retire>
                     <delete>Delete team</delete>
 
@@ -527,7 +526,7 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
             <highelf>High Elf</highelf>
             <human>Human</human>
             <khemritombkings>Khemri Tomb Kings</khemritombkings>
-            <lizardman>Lizardman</lizardman>
+            <lizardman>Lizardmen</lizardman>
             <necromantichorror>Necromantic Horror</necromantichorror>
             <norse>Norse</norse>
             <nurgle>Nurgle</nurgle>
@@ -596,6 +595,7 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
             <tombguardian>Tomb Guardian</tombguardian>
             <!-- Lizardman -->
             <skinkrunner>Skink Runner</skinkrunner>
+            <chameleonskink>Chameleon Skink</chameleonskink>
             <saurusblocker>Saurus Blocker</saurusblocker>
             <kroxigor>Kroxigor</kroxigor>
             <!-- Necromantic Horror -->
@@ -761,6 +761,11 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
             <maplehighgrove>*Maple Highgrove</maplehighgrove>
             <zolcaththezoat>*Zolcath the Zoat</zolcaththezoat>
             <curnothdarkwold>*Curnoth Darkwold</curnothdarkwold>
+            <!-- Added BB2016 Spike! #7 -->
+            <anqipanqi>*Anqi Panqi</anqipanqi>
+            <drull>*Drull</drull>
+            <dribl>*Dribl</dribl>
+            <glotlstop>*Glotl Stop</glotlstop>
         </position>
 
         <skill>
@@ -959,6 +964,11 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
             <maplehighgrove>Maple Highgrove</maplehighgrove>
             <zolcaththezoat>Zolcath the Zoat</zolcaththezoat>
             <curnothdarkwold>Curnoth Darkwold</curnothdarkwold>
+            <!-- Added BB2016 Spike! #7 -->
+            <anqipanqi>Anqi Panqi</anqipanqi>
+            <drull>Drull</drull>
+            <dribl>Dribl</dribl>
+            <glotlstop>Glotl Stop</glotlstop>
         </starplayer>
 
         <daysofweek>
