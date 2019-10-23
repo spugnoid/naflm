@@ -56,9 +56,6 @@ class SQLCore
 		return $status;
 	}
 
-/* #######################################################
-* Check here for adding Seasons Played and Wants to Retire
-*/
 	public static function mkHRS(array $HRSs) {
 		global $CT_cols, $core_tables;
 		$allowed_fields = array(

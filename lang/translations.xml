@@ -144,6 +144,7 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
 			<incentive>Incentive</incentive>
             <gp_this_seas>Season Games</gp_this_seas>
             <tdcas_this_seas>TDCAS This Season</tdcas_this_seas>
+            <ongoing_sponsors>Ongoing Sponsorships</ongoing_sponsors>
 
 
             <!-- nodeSelector() -->
@@ -314,6 +315,8 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
 					<want2retire>Player Wants to Retire</want2retire>
                     <retire>Retire team</retire>
                     <delete>Delete team</delete>
+                    <!-- Sponsorships -->
+                    <ongoing_sponsors>Ongoing Sponsorships</ongoing_sponsors>
 
                     <!-- Strings used within action boxes -->
                     <fdescs>
@@ -339,6 +342,7 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                         <delete> <![CDATA[ Delete team.<br>For the sake of keeping league statistics intact you are not allowed to delete teams which have played matches. The deletion takes effect immediately, but will first be visible on <b>next page reload</b>. ]]> </delete>
                         <s_played> <![CDATA[ Another season down.<br>After each season, apply this function to each player on the roster. <b>If they are still alive!</b>. ]]> </s_played>
                         <want2retire> <![CDATA[ Starting with 2 seasons under their belt, roll 1D6. If the result is less than Seasons Played, the player wants to retire. <b>The incentive goes up every season!</b>. ]]> </want2retire>
+                        <ongoing_sponsors><![CDATA[ If a team aquires an Ongoing Sponsorship, add it here.<br>If you wish to drop one or more Ongoing Sponsorships, check the negative value button. ]]></ongoing_sponsors>
 
                     </desc>
                 </box_tm>
@@ -359,6 +363,7 @@ For example, english is in <en-GB>, french in <fr-FR>, .......
                     <dff>Redraft FF Change</dff>
                     <xdsp>Adjust Seasons Played</xdsp>
                     <xur>Unflag Player Wants to Retire</xur>
+                    <mmm>Ongoing Sponsorships</mmm>
 
                     <desc>
                         <unhire_journeyman> <![CDATA[ Regret permanently hiring a journeyman.<br> This only works on players from a 0-16 allowed position on your team's roster. ]]> </unhire_journeyman>

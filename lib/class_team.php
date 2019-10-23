@@ -25,8 +25,9 @@ class Team
     public $imported          = false;
     public $is_retired        = 0;
     public $value             = 0;
-    public $tv             = 0; # Identical.
+    public $tv                = 0; # Identical.
     public $ff_bought         = 0; # Required to pull data from new columns for teams
+    public $sponsors          = 0; # TEST
 
     // MySQL stored initials for imported teams
     public $won_0    = 0;
@@ -305,6 +306,21 @@ class Team
         }
     }
 
+    // NOTE Delta for Ongoing Sponsors COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    public function xongoing_sponsors($delta)
+    {
+        /*
+         * Adjust team's Ongoing Sponsors. Modifies teams table
+         */
+        $query = "UPDATE teams SET sponsors = GREATEST(sponsors + $delta, 0) WHERE team_id = $this->team_id";
+        if (mysql_query($query)) {
+            $this->sponsors += $delta;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function setff_bought($integer)
     {
         /**
@@ -568,6 +584,7 @@ class Team
         'gf_0',
         'ga_0',
         'imported',
+        'sponsors', # TEST
     );
 
     public static function create(array $input)

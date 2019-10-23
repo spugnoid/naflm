@@ -110,6 +110,7 @@ NOTE: We do NOT show teams not having played any matches for nodes = {T_NODE_TOU
             'cheerleaders' => array('desc' => 'Cheerleaders'),
             'treasury'     => array('desc' => 'Treasury', 'kilo' => true, 'suffix' => 'k'),
             'tv'           => array('desc' => 'TV', 'kilo' => true, 'suffix' => 'k'),
+            'sponsors'     => array('desc' => 'Ongoing Sponsors'),
         );
 
         HTMLOUT::sort_table(
@@ -222,6 +223,12 @@ NOTE: We do NOT show teams not having played any matches for nodes = {T_NODE_TOU
 // NOTE Add case for flagging player wants to retire
             case 'want2retire':status($p->flag_wantRetire(($_POST['flag'] == '+' ? 1 : -1)));
                 status($p->calc_incentive(($_POST['math'])));
+                break;
+
+// NOTE Adjust Ongoing Sponsorships COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            case 'ongoing_sponsors':
+                status($team->xongoing_sponsors($d_sponsors = ($_POST['sign'] == '+' ? 1 : -1) * $_POST['amount']));
+                SQLTriggers::run(T_SQLTRIG_TEAM_DPROPS, array('obj' => T_OBJ_TEAM, 'id' => $team->team_id));
                 break;
 
             case 'retire':status(isset($_POST['bool']) && $team->setRetired(true));
@@ -1222,6 +1229,10 @@ if (in_array($team->f_race_id, $racesHasNecromancer)) {
                 <td><?php echo $team->cheerleaders; ?></td>
             </tr>
             <tr>
+                <td><?php echo $lng->getTrn('common/ongoing_sponsors') ?></td>
+                <td><?php echo $team->sponsors; ?></td>
+            </tr>
+            <tr>
                 <td colspan=2>
                     <hr>
                 </td>
@@ -1723,21 +1734,23 @@ HTMLOUT::generateEStable($this);
         <?php
 $base    = 'profile/team';
         $tmanage = array(
-            'hire_player'     => $lng->getTrn($base . '/box_tm/hire_player'),
-            'hire_journeyman' => $lng->getTrn($base . '/box_tm/hire_journeyman'),
-            'fire_player'     => $lng->getTrn($base . '/box_tm/fire_player'),
-            'unbuy_player'    => $lng->getTrn($base . '/box_tm/unbuy_player'),
-            'rename_player'   => $lng->getTrn($base . '/box_tm/rename_player'),
-            'renumber_player' => $lng->getTrn($base . '/box_tm/renumber_player'),
-            'rename_team'     => $lng->getTrn($base . '/box_tm/rename_team'),
-            'buy_goods'       => $lng->getTrn($base . '/box_tm/buy_goods'),
-            'drop_goods'      => $lng->getTrn($base . '/box_tm/drop_goods'),
-            'ready_state'     => $lng->getTrn($base . '/box_tm/ready_state'),
+            'hire_player'      => $lng->getTrn($base . '/box_tm/hire_player'),
+            'hire_journeyman'  => $lng->getTrn($base . '/box_tm/hire_journeyman'),
+            'fire_player'      => $lng->getTrn($base . '/box_tm/fire_player'),
+            'unbuy_player'     => $lng->getTrn($base . '/box_tm/unbuy_player'),
+            'rename_player'    => $lng->getTrn($base . '/box_tm/rename_player'),
+            'renumber_player'  => $lng->getTrn($base . '/box_tm/renumber_player'),
+            'rename_team'      => $lng->getTrn($base . '/box_tm/rename_team'),
+            'buy_goods'        => $lng->getTrn($base . '/box_tm/buy_goods'),
+            'drop_goods'       => $lng->getTrn($base . '/box_tm/drop_goods'),
+            'ready_state'      => $lng->getTrn($base . '/box_tm/ready_state'),
+// NOTE Adjust Ongoing Sponsors
+            'ongoing_sponsors' => $lng->getTrn($base . '/box_tm/ongoing_sponsors'),
 // NOTE Add seasons played increment
-            's_played'        => $lng->getTrn($base . '/box_tm/s_played'),
+            's_played'         => $lng->getTrn($base . '/box_tm/s_played'),
 // NOTE Add player wants to retire flag
-            'want2retire'     => $lng->getTrn($base . '/box_tm/want2retire'),
-            'delete'          => $lng->getTrn($base . '/box_tm/delete'),
+            'want2retire'      => $lng->getTrn($base . '/box_tm/want2retire'),
+            'delete'           => $lng->getTrn($base . '/box_tm/delete'),
         );
 # If one of these are selected from the menu, a JavaScript confirm prompt is displayed before submitting.
         # Note: Don't add "hire_player" here - players may be un-bought if not having played any games.
@@ -2025,7 +2038,7 @@ break;
 ======================================================================================================*/
 
 /**************
- * NOTE Add a played season to player COACH FUNTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ * NOTE Add a played season to player COACH FUNCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  **************/
             case 's_played':
                 echo $lng->getTrn('profile/team/box_tm/desc/s_played');
@@ -2049,6 +2062,21 @@ $DISABLE = true;
                 <input type="checkbox" UNCHECKED name="incr" value="+"> Add a Season?
                 <input type="hidden" name="type" value="s_played">
                 <?php
+break;
+
+/***************
+ * NOTE Adjust Ongoing Sponsorships COACH FUNCTION
+ **************/
+            case 'ongoing_sponsors':
+                echo $lng->getTrn('profile/team/box_tm/desc/ongoing_sponsors');
+                ?>
+            <hr><br>
+            &Delta; Ongoing Sponsorships:<br>
+            <input type="radio" CHECKED name="sign" value="+">+
+            <input type="radio" name="sign" value="-">-
+            <input type='text' name="amount" maxlength=1 size=1> Sponsors
+            <input type="hidden" name="type" value="ongoing_sponsors">
+            <?php
 break;
 
 /***************
