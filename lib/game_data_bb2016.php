@@ -4808,7 +4808,8 @@ $stars = array(
         'icon'  => 'star',
         'races' => array(13, 17, 18),
     ),
-    'Lewdgrip Whiparm'                         => array( // Updated in BB2016 Spike! #1 ============================================================
+    'Lewdgrip Whiparm'                         => array( 
+    // Updated in BB2016 Spike! #1 ============================================================
         'id'    => -55,
         'ma'    => 6,
         'st'    => 3,
