@@ -23,7 +23,11 @@ Whenever the values og this file are changed you must run the
 # the name in the file applies to their position only.
 # August 11, 2019
 
-Spike 7 data added Oct 22, 2019
+#Spike 7 data added Oct 22, 2019
+
+#Spike 8 data added Jan 10, 2020
+
+
 ######################################################################################################
 
  ******************************************************************************************************** */
@@ -219,6 +223,17 @@ $DEA = array(
                 'icon'   => 'star',
                 'pos_id' => 1233,
             ),
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1236,
+            ),
         ),
     ),
     'Chaos Chosen'        => array(
@@ -401,6 +416,18 @@ $DEA = array(
                 'icon'   => 'star',
                 'pos_id' => 1165,
             ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1237,
+            ),
         ),
     ),
     'Chaos Dwarf'         => array(
@@ -528,6 +555,18 @@ $DEA = array(
                 'cost'   => 430000,
                 'icon'   => 'star',
                 'pos_id' => 1166,
+            ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1238,
             ),
         ),
     ),
@@ -725,6 +764,18 @@ $DEA = array(
                 'icon'   => 'star',
                 'pos_id' => 1189,
             ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1239,
+            ),
         ),
     ),
     'Dwarf'               => array(
@@ -865,6 +916,18 @@ $DEA = array(
                 'cost'   => 430000,
                 'icon'   => 'star',
                 'pos_id' => 1168,
+            ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1240,
             ),
         ),
     ),
@@ -1048,6 +1111,18 @@ $DEA = array(
                 'cost'   => 170000,
                 'icon'   => 'star',
                 'pos_id' => 1192,
+            ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1241,
             ),
         ),
     ),
@@ -1240,6 +1315,18 @@ $DEA = array(
                 'cost'   => 430000,
                 'icon'   => 'star',
                 'pos_id' => 1170,
+            ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1242,
             ),
         ),
     ),
@@ -1435,6 +1522,18 @@ $DEA = array(
                 'icon'   => 'star',
                 'pos_id' => 1219,
             ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1243,
+            ),
         ),
     ),
     'High Elf'            => array(
@@ -1607,6 +1706,18 @@ $DEA = array(
                 'icon'   => 'star',
                 'pos_id' => 1193,
             ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1244,
+            ),
         ),
     ),
     'Human'               => array(
@@ -1770,6 +1881,18 @@ $DEA = array(
                 'icon'   => 'star',
                 'pos_id' => 1173,
             ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1245,
+            ),
         ),
     ),
     'Khemri Tomb Kings'   => array(
@@ -1930,6 +2053,18 @@ $DEA = array(
                 'cost'   => 190000,
                 'icon'   => 'star',
                 'pos_id' => 1196,
+            ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1246,
             ),
         ),
     ),
@@ -2114,6 +2249,18 @@ $DEA = array(
                 'icon'   => 'star',
                 'pos_id' => 1232,
             ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1247,
+            ),
         ),
     ),
     'Orc'                 => array(
@@ -2268,6 +2415,18 @@ $DEA = array(
                 'icon'   => 'star',
                 'pos_id' => 1175,
             ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1248,
+            ),
         ),
     ),
     'Necromantic Horror'  => array(
@@ -2290,7 +2449,7 @@ $DEA = array(
                 'icon'   => 'zombie1',
                 'pos_id' => 130,
             ),
-            'Ghoul Runner'                          => array(
+            'Ghoul'                          => array(
                 'ma'     => 7,
                 'st'     => 3,
                 'ag'     => 3,
@@ -2303,7 +2462,7 @@ $DEA = array(
                 'icon'   => 'ughoul1',
                 'pos_id' => 131,
             ),
-            'Wight Blitzer'                         => array(
+            'Wight'                         => array(
                 'ma'     => 6,
                 'st'     => 3,
                 'ag'     => 3,
@@ -2474,6 +2633,18 @@ $DEA = array(
                 'cost'   => 280000,
                 'icon'   => 'star',
                 'pos_id' => 1201,
+            ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1249,
             ),
         ),
     ),
@@ -2650,6 +2821,18 @@ $DEA = array(
                 'cost'   => 430000,
                 'icon'   => 'star',
                 'pos_id' => 1176,
+            ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1250,
             ),
         ),
     ),
@@ -2846,6 +3029,18 @@ $DEA = array(
                 'icon'   => 'star',
                 'pos_id' => 1203,
             ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1251,
+            ),
         ),
     ),
     'Ogre'                => array(
@@ -2855,12 +3050,12 @@ $DEA = array(
             'race_id' => T_RACE_OGRE, # (Ogre)
         ),
         'players' => array(
-            'Runt'                           => array(
+            'Gnoblar'                           => array(
                 'ma'     => 5,
                 'st'     => 1,
                 'ag'     => 3,
                 'av'     => 5,
-                'def'    => array(23, 104, 26, 108, 111),
+                'def'    => array(118,23,104,26,108,111),
                 'norm'   => array('A'),
                 'doub'   => array('G', 'S', 'P'),
                 'qty'    => 16,
@@ -2876,10 +3071,23 @@ $DEA = array(
                 'def'    => array(94, 54, 59, 110),
                 'norm'   => array('S'),
                 'doub'   => array('G', 'A', 'P'),
-                'qty'    => 6,
+                'qty'    => 5,
                 'cost'   => 140000,
                 'icon'   => 'ogre1',
                 'pos_id' => 161,
+            ),
+            'Runt Punter'                           => array(
+                'ma'     => 5,
+                'st'     => 5,
+                'ag'     => 2,
+                'av'     => 9,
+                'def'    => array(94, 119, 54, 59),
+                'norm'   => array('S'),
+                'doub'   => array('G', 'A', 'P'),
+                'qty'    => 1,
+                'cost'   => 150000,
+                'icon'   => 'ogre1',
+                'pos_id' => 1234,
             ),
             // ROSTERED STAR PLAYERS =============================================
             'Bertha Bigfist'                 => array(
@@ -2970,6 +3178,17 @@ $DEA = array(
                 'cost'   => 120000,
                 'icon'   => 'star',
                 'pos_id' => 1222,
+            ),
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1235,
             ),
         ),
     ),
@@ -3200,6 +3419,18 @@ $DEA = array(
                 'icon'   => 'star',
                 'pos_id' => 1210,
             ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1252,
+            ),
         ),
     ),
     'Vampire'             => array(
@@ -3323,6 +3554,18 @@ $DEA = array(
                 'cost'   => 280000,
                 'icon'   => 'star',
                 'pos_id' => 1212,
+            ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1253,
             ),
         ),
     ),
@@ -3497,6 +3740,18 @@ $DEA = array(
                 'cost'   => 430000,
                 'icon'   => 'star',
                 'pos_id' => 1180,
+            ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1254,
             ),
         ),
     ),
@@ -3716,6 +3971,18 @@ $DEA = array(
                 'icon'   => 'star',
                 'pos_id' => 1227,
             ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1255,
+            ),
         ),
     ),
     // Added in LRB6
@@ -3930,6 +4197,18 @@ $DEA = array(
                 'icon'   => 'star',
                 'pos_id' => 1182,
             ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1256,
+            ),
         ),
     ),
     'Slann'               => array(
@@ -4056,6 +4335,18 @@ $DEA = array(
                 'cost'   => 430000,
                 'icon'   => 'star',
                 'pos_id' => 1183,
+            ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1257,
             ),
         ),
     ),
@@ -4241,6 +4532,18 @@ $DEA = array(
                 'cost'   => 430000,
                 'icon'   => 'star',
                 'pos_id' => 1184,
+            ),
+            // Spike! 8
+            'Bob Bifford'             => array(
+                'ma'     => 5,
+                'st'     => 6,
+                'ag'     => 2,
+                'av'     => 10,
+                'def'    => array(99, 1, 50, 53, 54, 55, 110, 59),
+                'qty'    => 1,
+                'cost'   => 380000,
+                'icon'   => 'star',
+                'pos_id' => 1258,
             ),
         ),
     ),
@@ -4550,7 +4853,7 @@ $stars = array(
         'def'   => array(99, 1, 54, 59, 110),
         'cost'  => 430000,
         'icon'  => 'star',
-        'races' => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 14, 15, 16, 18, 19, 20, 21, 22, 23),
+        'races' => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23),
     ),
     'Nobbla Blackwart'                         => array(
         'id'    => -32,
@@ -5378,6 +5681,19 @@ $stars = array(
         'icon'  => 'star',
         'races' => array(T_RACE_AMAZON, T_RACE_LIZARDMAN),
     ),
+    // Added in Spike! 8
+    'Bob Bifford'             => array(
+        'id'     => -105,
+        'ma'     => 5,
+        'st'     => 6,
+        'ag'     => 2,
+        'av'     => 10,
+        'def'    => array(99, 97, 1, 50, 53, 54, 55, 110, 59),
+        'qty'    => 1,
+        'cost'   => 380000,
+        'icon'   => 'star',
+        'races' => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23),
+    ),
 );
 /*  Paired Stars  ***************************************************************************************** */
 $starpairs = array(
@@ -5516,6 +5832,9 @@ $skillarray = array(
         116 => 'Weeping Blades',
         // Added in BB2016 DZ2
         117 => 'Swoop',
+        // Added in Spike! 8
+        118 => 'Disposable',
+        119 => 'Kick Team-Mate',
     ),
 );
 // Create skill ID index (key:val = id:skill_name).
@@ -5682,9 +6001,11 @@ $inducements = array(
         'reduced_cost'       => 60000,
         'reduced_cost_races' => array(T_RACE_HALFLING, T_RACE_OGRE),
     ),
+    
+    // Adjusted in BB2016 Spike! #8
     'Bottle of Heady Brew'       => array(
         'cost'               => 0,
-        'max'                => 1,
+        'max'                => 3,
         'reduced_cost'       => 40000,
         'reduced_cost_races' => array(T_RACE_HALFLING, T_RACE_OGRE),
     ),
@@ -5694,6 +6015,19 @@ $inducements = array(
         'max'                => 1,
         'reduced_cost'       => 50000,
         'reduced_cost_races' => array(),
+    ),
+    // Added in BB2016 Spike! #8
+    'Slave Giant'       => array(
+        'cost'               => 400000,
+        'max'                => 1,
+        'reduced_cost'       => 400000,
+        'reduced_cost_races' => array(),
+    ),
+    'Riotous Rookies'       => array(
+        'cost'               => 0,
+        'max'                => 1,
+        'reduced_cost'       => 100000,
+        'reduced_cost_races' => array(T_RACE_OGRE),
     ),
 );
 /* ******************************************************************************************************** **
@@ -5743,7 +6077,7 @@ INDUCED STAR FORMAT----------------------------
 'icon'   => 'star',
 ),
 
-// !!!!  1233 is highest used position for ROSTERED STAR PLAYERS and Regular Players ==================================
-// !!!!  -104 is the highest used position for INDUCED STAR PLAYERS ================================
+// !!!!  1258 is highest used position for ROSTERED STAR PLAYERS and Regular Players ==================================
+// !!!!  -105 is the highest used position for INDUCED STAR PLAYERS ================================
 
  */
