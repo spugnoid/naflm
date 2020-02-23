@@ -209,7 +209,7 @@ class SQLCore
 
 			/* Player DPROPS */
 			DECLARE done INT DEFAULT 0;
-			DECLARE inj_ma,inj_av,inj_ag,inj_st,inj_ni, ma,av,ag,st '.$CT_cols['chr'].';
+			DECLARE inj_ma,inj_av,inj_ag,inj_st,inj_ni,healed_inj_ni, ma,av,ag,st '.$CT_cols['chr'].';
 			DECLARE ma_ua,av_ua,ag_ua,st_ua '.$CT_cols['chr_ua'].';
 			DECLARE value '.$CT_cols['pv'].';
 			DECLARE status '.$core_tables['players']['status'].';
@@ -304,9 +304,10 @@ class SQLCore
 				IF NOT done THEN
 
 					/* Update player DPROPS */
-					CALL getPlayerDProps(pid, inj_ma,inj_av,inj_ag,inj_st,inj_ni, ma,av,ag,st, ma_ua,av_ua,ag_ua,st_ua, value,status,date_died);
+					CALL getPlayerDProps(pid, inj_ma,inj_av,inj_ag,inj_st,inj_ni,healed_inj_ni, ma,av,ag,st, ma_ua,av_ua,ag_ua,st_ua, value,status,date_died);
 					UPDATE players
 						SET players.inj_ma = inj_ma, players.inj_av = inj_av, players.inj_ag = inj_ag, players.inj_st = inj_st, players.inj_ni = inj_ni,
+							players.healed_inj_ni = healed_inj_ni,
 							players.ma = ma, players.av = av, players.ag = ag, players.st = st,
 							players.ma_ua = ma_ua, players.av_ua = av_ua, players.ag_ua = ag_ua, players.st_ua = st_ua,
 							players.value = value, players.status = status, players.date_died = date_died
@@ -1002,7 +1003,7 @@ class SQLCore
 				DECLARE winner '.$CT_cols[T_OBJ_TEAM].';
 
 				DECLARE pid '.$CT_cols[T_OBJ_PLAYER].';
-				DECLARE inj_ma,inj_av,inj_ag,inj_st,inj_ni, ma,av,ag,st '.$CT_cols['chr'].';
+				DECLARE inj_ma,inj_av,inj_ag,inj_st,inj_ni,healed_inj_ni, ma,av,ag,st '.$CT_cols['chr'].';
 				DECLARE ma_ua,av_ua,ag_ua,st_ua '.$CT_cols['chr_ua'].';
 				DECLARE value '.$CT_cols['pv'].';
 				DECLARE status '.$core_tables['players']['status'].';
@@ -1032,9 +1033,9 @@ class SQLCore
 				REPEAT
 					FETCH cur_p INTO pid;
 					IF NOT done THEN
-						CALL getPlayerDProps(pid, inj_ma,inj_av,inj_ag,inj_st,inj_ni, ma,av,ag,st, ma_ua,av_ua,ag_ua,st_ua, value,status,date_died);
+						CALL getPlayerDProps(pid, inj_ma,inj_av,inj_ag,inj_st,inj_ni,healed_inj_ni, ma,av,ag,st, ma_ua,av_ua,ag_ua,st_ua, value,status,date_died);
 						UPDATE players
-							SET players.inj_ma = inj_ma, players.inj_av = inj_av, players.inj_ag = inj_ag, players.inj_st = inj_st, players.inj_ni = inj_ni,
+							SET players.inj_ma = inj_ma, players.inj_av = inj_av, players.inj_ag = inj_ag, players.inj_st = inj_st, players.inj_ni = inj_ni, players.healed_inj_ni = healed_inj_ni,
 								players.ma = ma, players.av = av, players.ag = ag, players.st = st,
 								players.ma_ua = ma_ua, players.av_ua = av_ua, players.ag_ua = ag_ua, players.st_ua = st_ua,
 								players.value = value, players.status = status, players.date_died = date_died
@@ -1058,7 +1059,7 @@ class SQLCore
 
 			'CREATE PROCEDURE getPlayerDProps(
 				IN pid '.$CT_cols[T_OBJ_PLAYER].',
-				OUT inj_ma '.$CT_cols['chr'].',   OUT inj_av '.$CT_cols['chr'].',   OUT inj_ag '.$CT_cols['chr'].',   OUT inj_st '.$CT_cols['chr'].', OUT inj_ni '.$CT_cols['chr'].',
+				OUT inj_ma '.$CT_cols['chr'].',   OUT inj_av '.$CT_cols['chr'].',   OUT inj_ag '.$CT_cols['chr'].',   OUT inj_st '.$CT_cols['chr'].', OUT inj_ni '.$CT_cols['chr'].',  OUT healed_inj_ni '.$CT_cols['chr'].',
 				OUT ma '.$CT_cols['chr'].',       OUT av '.$CT_cols['chr'].',       OUT ag '.$CT_cols['chr'].',       OUT st '.$CT_cols['chr'].',
 				OUT ma_ua '.$CT_cols['chr_ua'].', OUT av_ua '.$CT_cols['chr_ua'].', OUT ag_ua '.$CT_cols['chr_ua'].', OUT st_ua '.$CT_cols['chr_ua'].',
 				OUT value '.$CT_cols['pv'].', OUT status '.$core_tables['players']['status'].', OUT date_died '.$core_tables['players']['date_died'].'

@@ -79,6 +79,8 @@ class Player
     public $inj_av = 0;
     public $inj_ni = 0;
 
+    public $healed_inj_ni = 0;
+
     // Player status
     public $is_sold             = false;
     public $is_dead             = false;
@@ -355,13 +357,27 @@ class Player
             return false;
         }        
     }
-    
+    /*
+    // Is LEAST was GREATEST +++++++++++++++++++++++++++++++++++++++++++++++
     public function removeNiggle() {
         if ($this->is_journeyman || $this->is_sold || $this->is_dead)
             return false;
-        $query = "UPDATE players SET inj_ni = GREATEST(inj_ni - 1, 0) WHERE player_id = $this->player_id";
+        $query = "UPDATE players SET inj_ni = LEAST(inj_ni - 1, 0) WHERE player_id = $this->player_id";
         return mysql_query($query);
     }
+*/
+
+    // TESTING +++++++++++++++++++++++++++++++++++++++++++++++++++
+    public function removeNiggle() {
+        if ($this->is_journeyman || $this->is_sold || $this->is_dead)
+            return false;
+        $query = "UPDATE players SET healed_inj_ni = GREATEST(healed_inj_ni - 1 +inj_ni, 0) WHERE player_id = $this->player_id";
+        return mysql_query($query);
+    }
+
+
+
+
 
     public function rename($new_name) {
         return mysql_query("UPDATE players SET name = '" . mysql_real_escape_string($new_name) . "' WHERE player_id = $this->player_id");
@@ -612,11 +628,23 @@ class Player
         if ($this->inj_st > 0) array_push($injs, "-$this->inj_st St");
         if ($this->inj_ag > 0) array_push($injs, "-$this->inj_ag Ag");
         if ($this->inj_av > 0) array_push($injs, "-$this->inj_av Av");
+        
+//TEST
         if ($HTML) {
-            if ($this->inj_ni > 0) array_push($injs, "<font color='red'>$this->inj_ni Ni</font>");
+            if ($this->inj_ni - $this->healed_inj_ni > 0) array_push($injs, "<font color='red'>$this->inj_ni  Ni</font>");
+        } else {
+            if ($this->inj_ni - $this->inj_ni > 0) array_push($injs, "$this->inj_ni Ni");
+        }
+
+        /*
+        if ($HTML) {
+            if ($this->inj_ni > 0) array_push($injs, "<font color='red'>$this->inj_ni - healed_inj_ni Ni</font>");
         } else {
             if ($this->inj_ni > 0) array_push($injs, "$this->inj_ni Ni");
         }
+        */
+//TEST        
+
         if ($this->is_mng)     array_push($injs, "MNG");
         return implode(', ', $injs);
     }
